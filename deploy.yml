@@ -1,0 +1,47 @@
+-   name: Deploy
+    hosts: all
+
+    vars:
+      ansistrano_deploy_from: "{{ playbook_dir }}/" # Where my local project is (relative or absolute path)
+      ansistrano_deploy_to: "/var/www/rw2" # Base path to deploy to.
+      ansistrano_version_dir: "releases" # Releases folder name
+      ansistrano_current_dir: "current" # Softlink name. You should rarely changed it.
+      ansistrano_current_via: "symlink" # Deployment strategy who code should be deployed to current path. Options are symlink or rsync
+      ansistrano_keep_releases: 3 # Releases to keep after a new deployment. See "Pruning old releases".
+
+      # Arrays of directories and files to be shared.
+      # The following arrays of directories and files will be symlinked to the current release directory after the 'update-code' step and its callbacks
+      # Notes:
+      # * Paths are relative to the /shared directory (no starting /)
+      # * If your items are in a subdirectory, write the entire path to each shared directory
+      #
+      # Example:
+      # ansistrano_shared_paths:
+      #   - path/to/first-dir
+      #   - path/next-dir
+      # ansistrano_shared_files:
+      #   - my-file.txt
+      #   - path/to/file.txt
+      ansistrano_shared_paths: []
+      ansistrano_shared_files: []
+
+
+      # Shared paths and basedir shared files creation.
+      # By default the shared paths directories and base directories for shared files are created automatically if not exists. But in some scenarios those paths could be symlinks to another directories in the filesystem, and the deployment process would fails. With these variables you can disable the involved tasks. If you have two or three shared paths, and don't need creation only for some of them, you always could disable the automatic creation and add a custom task in a hook.
+      ansistrano_ensure_shared_paths_exist: yes
+      ansistrano_ensure_basedirs_shared_files_exist: yes
+
+    
+      ansistrano_deploy_via: "git" 
+
+      ansistrano_allow_anonymous_stats: yes
+
+      # Variables used in the Git deployment strategy
+      ansistrano_git_repo: git@github.com:lwg1103/RunnersWeather2.git # Location of the git repository
+      ansistrano_git_branch: master # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
+      ansistrano_git_repo_tree: "" # If specified the subtree of the repository to deploy
+      
+      symfony_console_path: 'bin/console'
+      symfony_run_assetic_dump: false
+    roles:
+      - { role: cbrunnkvist.ansistrano-symfony-deploy }

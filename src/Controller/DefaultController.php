@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/default", name="default")
+     * @Route("/", name="default")
      */
     public function index()
     {
