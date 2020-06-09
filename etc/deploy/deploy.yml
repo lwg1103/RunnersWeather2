@@ -22,7 +22,9 @@
       # ansistrano_shared_files:
       #   - my-file.txt
       #   - path/to/file.txt
-      ansistrano_shared_paths: []
+      ansistrano_shared_paths:
+        - var/log
+        - var/cache
       ansistrano_shared_files: []
 
 
@@ -43,5 +45,9 @@
       
       symfony_console_path: 'bin/console'
       symfony_run_assetic_dump: false
+      
+      ansistrano_before_symlink_shared_tasks_file: "{{ playbook_dir }}/config/before-symlink-shared-tasks.yml"
+      ansistrano_after_cleanup_tasks_file: "{{ playbook_dir }}/config/after-cleanup-tasks.yml"
+
     roles:
       - { role: cbrunnkvist.ansistrano-symfony-deploy }

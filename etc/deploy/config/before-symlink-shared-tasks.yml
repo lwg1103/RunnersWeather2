@@ -1,0 +1,20 @@
+- name: generate empty var dir
+  shell: mkdir var
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}/"
+- name: generate empty log dir
+  shell: mkdir log
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}/var"
+- name: generate empty cache dir
+  shell: mkdir cache
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}/var"
+- name: install yarn
+  shell: yarn install
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}/"
+- name: yarn encore
+  shell: yarn encore production
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}/"

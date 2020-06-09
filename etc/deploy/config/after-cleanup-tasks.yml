@@ -1,0 +1,12 @@
+- name: set permissions for log dir
+  shell: chmod -R 777 log
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}/var"
+- name: set permissions for cache dir
+  shell: chmod -R 777 cache
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}/var"
+- name: set permissions for cache/prod dir
+  shell: chmod -R 777 prod
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}/var/cache"

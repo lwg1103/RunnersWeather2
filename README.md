@@ -1,4 +1,4 @@
 # 0.1 initial version
 
 # deployment
-ansible-playbook -i hosts deploy.yml
+ansible-playbook -i etc/hosts etc/deploy/deploy.yml
