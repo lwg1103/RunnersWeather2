@@ -18,3 +18,11 @@
 body {
     background-color: lightgray;
 }
+
+.position {
+    width: 100%;
+}
+
+.main-btn {
+    width: 100%;
+}
