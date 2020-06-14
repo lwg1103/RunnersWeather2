@@ -5,7 +5,7 @@ class Map extends Component {
     
     render() {
         return(
-            <div>
+            <div className="map">
             Here will be the map
             </div>
         )
