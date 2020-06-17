@@ -18,7 +18,7 @@ class CheckButton extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result);
+                    this.props.onSuccess(result);
                 },
                 (error) => {
                     console.log(error);
