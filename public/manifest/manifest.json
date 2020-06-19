@@ -1,7 +1,7 @@
 {
   "name": "RunnersWeather2",
   "short_name": "RW2",
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#fff",
   "description": "Simple weather app for runners",
