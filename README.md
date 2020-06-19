@@ -1,3 +1,5 @@
+# 0.2 simple recommendation screen
+
 # 0.1 initial version
 
 # deployment
