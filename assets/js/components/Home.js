@@ -11,8 +11,8 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            long: 1.0,
-            lat: 1.0,
+            long: 17.05629,
+            lat: 51.08613,
             screen: Screen.Home
         };
 
