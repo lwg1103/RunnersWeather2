@@ -4,6 +4,7 @@ namespace App\CurrentConditions;
 
 use App\Conditions\WeatherConditions;
 use App\HttpClient\IHttpClient;
+use App\Conditions\WeatherType;
 
 class OpenWeatherConditionsProvider implements IConditionsProvider
 {
@@ -26,12 +27,17 @@ class OpenWeatherConditionsProvider implements IConditionsProvider
 
         $Conditions = new WeatherConditions;
         $Conditions->provider    = 'OpenWeather';
-        $Conditions->temperature = $parsedResponse['main']['feels_like'] - 272.15; //response in K
+        $Conditions->temperature = (int) ($parsedResponse['main']['feels_like'] - 272.15); //response in K
         $Conditions->humidity    = $parsedResponse['main']['humidity'];
         $Conditions->wind        = $parsedResponse['wind']['speed'];
-        $Conditions->type        = $parsedResponse['weather'][0]['id'];
+        $Conditions->type        = $this->convertWeatherType($parsedResponse['weather'][0]['id']);
 
         return $Conditions;
+    }
+
+    private function convertWeatherType(int $code): WeatherType
+    {
+        return (new OpenWeatherTypeConverter)->convertFromProviderFormat($code);
     }
 
 }

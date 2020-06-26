@@ -1,5 +1,7 @@
 <?php
 
+namespace App\tests\CurrentConditions;
+
 use PHPUnit\Framework\TestCase;
 use App\CurrentConditions\ConditionsChecker;
 use App\CurrentConditions\Exception\NoProvidersRegistered;

@@ -81,7 +81,7 @@ class Home extends Component {
                <p>PM 2.5: {this.state.conditions.pm25}</p>
                <p>PM 10: {this.state.conditions.pm10}</p>
                <p>Temp: {this.state.conditions.temperature} 'C</p>
-               <p>Weather: {this.state.conditions.type}</p>
+               <p>Weather: {this.state.conditions.type.name}</p>
                <p>Wind: {this.state.conditions.wind} m/s</p>
                <p>Humidity: {this.state.conditions.humidity} %</p>
                <p>Recomendation: {this.state.conditions.recommendation}</p>

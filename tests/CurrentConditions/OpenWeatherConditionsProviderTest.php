@@ -1,9 +1,12 @@
 <?php
 
+namespace App\tests\CurrentConditions;
+
 use PHPUnit\Framework\TestCase;
 use App\CurrentConditions\OpenWeatherConditionsProvider;
 use App\HttpClient\IHttpClient;
 use App\Conditions\WeatherConditions;
+use App\Conditions\WeatherType;
 
 class OpenWeatherConditionsProviderTest extends TestCase
 {
@@ -47,6 +50,7 @@ class OpenWeatherConditionsProviderTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Symfony\Contracts\HttpClient\ResponseInterface::class)
                 ->disableOriginalConstructor()
+                ->setMethods(['getContent'])
                 ->getMock();
 
         $responseMock->method('getContent')
@@ -92,9 +96,9 @@ class OpenWeatherConditionsProviderTest extends TestCase
     private function thenResultHasResponseValues()
     {
         $this->assertEquals(100, $this->result->humidity);
-        $this->assertEquals(269.42 - 272.15, $this->result->temperature);
+        $this->assertEquals((int) (269.42 - 272.15), $this->result->temperature);
         $this->assertEquals(5.7, $this->result->wind);
-        $this->assertEquals('803', $this->result->type);
+        $this->assertEquals(new WeatherType(WeatherType::Clouds), $this->result->type);
     }
 
 }

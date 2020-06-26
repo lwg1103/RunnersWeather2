@@ -2,7 +2,7 @@
 
 namespace App\Conditions;
 
-class WeatherType
+class WeatherType implements \JsonSerializable
 {
     const Thunderstorm = 1;
     const Drizzle = 2;
@@ -14,7 +14,7 @@ class WeatherType
     
     /** @var int */
     private $value;
-    
+
     public function __construct(int $value)
     {
         $this->value = $value;
@@ -43,6 +43,14 @@ class WeatherType
             case self::Other:
                 return 'Other';
         }
+    }
+    
+    public function jsonSerialize()
+    {
+        return [
+            'code' => $this->value,
+            'name' => (string) $this,
+        ];
     }
 
 }
