@@ -79,7 +79,7 @@ class Home extends Component {
                </nav>
                <BackButton callback={this.navigateTo} target={Screen.Home}/>
                <p>PM 2.5: {this.state.conditions.pm25}</p>
-               <p>PM 20: {this.state.conditions.pm10}</p>
+               <p>PM 10: {this.state.conditions.pm10}</p>
                <p>Temp: {this.state.conditions.temperature} 'C</p>
                <p>Weather: {this.state.conditions.type}</p>
                <p>Wind: {this.state.conditions.wind} m/s</p>

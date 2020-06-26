@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Conditions\WeatherConditions;
 use App\Conditions\WeatherType;
 use App\CurrentConditions\IConditionsChecker;
+use App\HttpClient\IHttpClient;
 
 /**
  * @Route("/api")
@@ -21,7 +22,11 @@ class ApiController extends AbstractController
      * @param float $long
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getWeather(float $lat, float $long, IConditionsChecker $ConditionsChecker)
+    public function getWeather(
+            float $lat,
+            float $long,
+            IConditionsChecker $ConditionsChecker,
+            IHttpClient $HttpClient)
     {
         //TODO this is a mock controller, only for development phase
         if ($long === 1.0) {
@@ -33,8 +38,11 @@ class ApiController extends AbstractController
             $weather->wind = 12.34;
             $weather->type = (string)(new WeatherType(WeatherType::Drizzle));
             $weather->recommendation = $lat;
-        } else {
-            $ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
+        }
+        else
+        {
+            $ConditionsChecker->registerConditionsProvider(new \App\CurrentConditions\OpenWeatherConditionsProvider($HttpClient));
+            $weather = $ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat)[0];
         }
         
         $response = new Response();
