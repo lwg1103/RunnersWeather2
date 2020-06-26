@@ -1,6 +1,6 @@
 <?php
 
-namespace App\tests\CurrentConditions;
+namespace App\Tests\CurrentConditions;
 
 use PHPUnit\Framework\TestCase;
 use App\CurrentConditions\ConditionsChecker;
