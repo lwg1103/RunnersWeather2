@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use App\CurrentConditions\OpenWeatherConditionsProvider;
 use App\HttpClient\IHttpClient;
+use App\Conditions\WeatherConditions;
 
 class OpenWeatherConditionsProviderTest extends TestCase
 {
@@ -10,20 +11,30 @@ class OpenWeatherConditionsProviderTest extends TestCase
 
     /** @var OpenWeatherConditionsProvider */
     private $OpenWeatherConditionsProvider;
+    private $result;
 
     public function testGetCurrentConditionsReturnsResult()
     {
-        
+        $this->whenGetConditions()
+                ->thenResultIsNotNull();
     }
 
     public function testGetCurrentConditionsReturnsWeatherConditions()
     {
-        
+        $this->whenGetConditions()
+                ->thenResultIsWeatherConditionsType();
     }
 
     public function testGetCurrentConditionsReturnsWeatherConditionsWithValues()
     {
-        
+        $this->whenGetConditions()
+                ->thenResultHasValues();
+    }
+
+    public function testGetCurrentConditionsReturnsWeatherConditionsWithValuesFromResponse()
+    {
+        $this->whenGetConditions()
+                ->thenResultHasResponseValues();
     }
 
     protected function setUp()
@@ -34,7 +45,56 @@ class OpenWeatherConditionsProviderTest extends TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
+        $responseMock = $this->getMockBuilder(Symfony\Contracts\HttpClient\ResponseInterface::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+        $responseMock->method('getContent')
+                ->willReturn(self::APIResponse);
+
+        $HttpClientMock->method('get')
+                ->willReturn($responseMock);
+
         $this->OpenWeatherConditionsProvider = new OpenWeatherConditionsProvider($HttpClientMock);
+    }
+
+    private function whenGetConditions()
+    {
+        $this->result = $this->OpenWeatherConditionsProvider->getCurrentConditionsForCoordinates(1.0, 1.0);
+
+        return $this;
+    }
+
+    private function thenResultIsNotNull()
+    {
+        $this->assertNotNull($this->result);
+
+        return $this;
+    }
+
+    private function thenResultIsWeatherConditionsType()
+    {
+        $this->assertInstanceOf(WeatherConditions::class, $this->result);
+
+        return $this;
+    }
+
+    private function thenResultHasValues()
+    {
+        $emptyWeatherConditions = new WeatherConditions;
+
+        $this->assertNotEquals($emptyWeatherConditions->humidity, $this->result->humidity);
+        $this->assertNotEquals($emptyWeatherConditions->temperature, $this->result->temperature);
+        $this->assertNotEquals($emptyWeatherConditions->wind, $this->result->wind);
+        $this->assertNotEquals($emptyWeatherConditions->type, $this->result->type);
+    }
+
+    private function thenResultHasResponseValues()
+    {
+        $this->assertEquals(100, $this->result->humidity);
+        $this->assertEquals(269.42 - 272.15, $this->result->temperature);
+        $this->assertEquals(5.7, $this->result->wind);
+        $this->assertEquals('803', $this->result->type);
     }
 
 }

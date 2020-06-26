@@ -17,7 +17,7 @@ class BackButton extends Component {
     render() {
         return(
             <div>
-                <Button outline color="primary" size='sm' onClick={this.runCallback}>Back</Button>
+                <Button outline color="primary" size="lg" onClick={this.runCallback}>Back</Button>
             </div>
         )
     }
