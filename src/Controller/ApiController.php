@@ -9,6 +9,7 @@ use App\Conditions\WeatherConditions;
 use App\Conditions\WeatherType;
 use App\CurrentConditions\IConditionsChecker;
 use App\HttpClient\IHttpClient;
+use App\Conditions\AverageWeatherConditionsCalculator;
 
 /**
  * @Route("/api")
@@ -26,6 +27,7 @@ class ApiController extends AbstractController
             float $lat,
             float $long,
             IConditionsChecker $ConditionsChecker,
+            AverageWeatherConditionsCalculator $AverageWeatherConditionsCalculator,
             IHttpClient $HttpClient)
     {
         //TODO this is a mock controller, only for development phase
@@ -43,7 +45,10 @@ class ApiController extends AbstractController
         {
             $ConditionsChecker->registerConditionsProvider(new \App\CurrentConditions\AirlyConditionsProvider($HttpClient));
             $ConditionsChecker->registerConditionsProvider(new \App\CurrentConditions\OpenWeatherConditionsProvider($HttpClient));
-            $weather = $ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat)[0];
+
+            $conditions = $ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
+
+            $weather = $AverageWeatherConditionsCalculator->calculate($conditions);
         }
         
         $response = new Response();

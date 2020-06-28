@@ -7,7 +7,7 @@ class ConditionsChecker implements IConditionsChecker
 {
     /** @var IConditionsProvider[] */
     private $ConditionsProviders = [];
-    
+
     public function getCurrentConditionsForCoordinates(float $long, float $lat): array
     {
         $this->checkRegisteredProviders();

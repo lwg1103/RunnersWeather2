@@ -1,3 +1,5 @@
+# 0.5 average conditions calculator
+
 # 0.4 airly integration
 
 # 0.3 open weather integration
