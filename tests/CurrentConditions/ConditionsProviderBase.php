@@ -4,10 +4,12 @@ namespace App\Tests\CurrentConditions;
 
 use PHPUnit\Framework\TestCase;
 use App\Conditions\WeatherConditions;
+use App\HttpClient\IHttpClient;
+use App\CurrentConditions\IConditionsProvider;
 
 abstract class ConditionsProviderBase extends TestCase
 {
-    /** @var App\CurrentConditions\IConditionsProvider */
+    /** @var IConditionsProvider */
     protected $ConditionsProvider;
     protected $result;
 
@@ -56,7 +58,33 @@ abstract class ConditionsProviderBase extends TestCase
         return $this;
     }
 
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $HttpClientMock = $this->getMockBuilder(IHttpClient::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+        $responseMock = $this->getMockBuilder(Symfony\Contracts\HttpClient\ResponseInterface::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['getContent'])
+                ->getMock();
+
+        $responseMock->method('getContent')
+                ->willReturn($this->getHttpResponseMock());
+
+        $HttpClientMock->method('get')
+                ->willReturn($responseMock);
+
+        $this->ConditionsProvider = $this->createTestSubject($HttpClientMock);
+    }
+
     abstract protected function thenResultHasValues();
 
     abstract protected function thenResultHasResponseValues();
+
+    abstract protected function createTestSubject(IHttpClient $client): IConditionsProvider;
+
+    abstract protected function getHttpResponseMock(): string;
 }

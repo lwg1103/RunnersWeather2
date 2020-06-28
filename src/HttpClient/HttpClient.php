@@ -9,7 +9,7 @@ class HttpClient implements IHttpClient
     /** @var SymfonyHttpClient */
     private $SymfonyHttpClient;
     /** @var array */
-    private $headers = [];
+    private $options = [];
 
     public function __construct()
     {
@@ -18,9 +18,9 @@ class HttpClient implements IHttpClient
 
     public function get(string $url)
     {
-        if ($this->headers !== [])
+        if ($this->options !== [])
         {
-            return $this->SymfonyHttpClient->request('GET', $url, [$this->headers]);
+            return $this->SymfonyHttpClient->request('GET', $url, $this->options);
         }
         else
         {
@@ -30,7 +30,7 @@ class HttpClient implements IHttpClient
 
     public function setApiKey(string $key)
     {
-        $this->headers['apikey'] = $key;
+        $this->options['headers']['apikey'] = $key;
     }
 
 }

@@ -41,6 +41,7 @@ class ApiController extends AbstractController
         }
         else
         {
+            $ConditionsChecker->registerConditionsProvider(new \App\CurrentConditions\AirlyConditionsProvider($HttpClient));
             $ConditionsChecker->registerConditionsProvider(new \App\CurrentConditions\OpenWeatherConditionsProvider($HttpClient));
             $weather = $ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat)[0];
         }

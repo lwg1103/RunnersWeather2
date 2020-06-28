@@ -22,12 +22,16 @@ class WeatherConditions
     /** @var float */
     public $wind;
     
-    /** @var string */
+    /** @var WeatherType */
     public $type;
-    
     /** @var int */
     public $recommendation;
-    
+
+    public function __construct()
+    {
+        $this->type = new WeatherType(0);
+    }
+
     public function toJSON()
     {
         return json_encode($this);

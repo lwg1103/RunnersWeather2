@@ -40,7 +40,7 @@ class WeatherType implements \JsonSerializable
                 return 'Clear';
             case self::Clouds:
                 return 'Clouds';
-            case self::Other:
+            default:
                 return 'Other';
         }
     }
