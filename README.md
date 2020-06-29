@@ -1,3 +1,5 @@
+# 0.6 decision maker
+
 # 0.5 average conditions calculator
 
 # 0.4 airly integration

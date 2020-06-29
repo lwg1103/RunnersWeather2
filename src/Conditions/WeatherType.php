@@ -2,7 +2,9 @@
 
 namespace App\Conditions;
 
-class WeatherType implements \JsonSerializable
+use App\SerializableType;
+
+class WeatherType extends SerializableType
 {
     const Thunderstorm = 1;
     const Drizzle = 2;
@@ -10,21 +12,8 @@ class WeatherType implements \JsonSerializable
     const Snow = 4;
     const Clear = 5;
     const Clouds = 6;
-    const Other = 7;
-    
-    /** @var int */
-    private $value;
+    const Other        = 7;
 
-    public function __construct(int $value)
-    {
-        $this->value = $value;
-    }
-    
-    public function getValue()
-    {
-        return $this->value;
-    }
-    
     public function __toString()
     {
         switch ($this->value) {
@@ -43,14 +32,6 @@ class WeatherType implements \JsonSerializable
             default:
                 return 'Other';
         }
-    }
-    
-    public function jsonSerialize()
-    {
-        return [
-            'code' => $this->value,
-            'name' => (string) $this,
-        ];
     }
 
 }

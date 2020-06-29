@@ -2,6 +2,8 @@
 
 namespace App\Conditions;
 
+use App\Decision\DecisionType;
+
 class WeatherConditions
 {
     /** @var string */
@@ -24,12 +26,13 @@ class WeatherConditions
     
     /** @var WeatherType */
     public $type;
-    /** @var int */
+    /** @var DecisionType */
     public $recommendation;
 
     public function __construct()
     {
-        $this->type = new WeatherType(0);
+        $this->type           = new WeatherType(0);
+        $this->recommendation = new DecisionType(0);
     }
 
     public function toJSON()
