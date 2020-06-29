@@ -27,12 +27,12 @@ class WeatherConditions
     /** @var WeatherType */
     public $type;
     /** @var DecisionType */
-    public $recommendation;
+    public $decision;
 
     public function __construct()
     {
         $this->type           = new WeatherType(0);
-        $this->recommendation = new DecisionType(0);
+        $this->decision = new DecisionType(0);
     }
 
     public function toJSON()

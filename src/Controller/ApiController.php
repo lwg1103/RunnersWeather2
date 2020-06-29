@@ -42,7 +42,7 @@ class ApiController extends AbstractController
             $weather->humidity = 45.67;
             $weather->wind = 12.34;
             $weather->type = (string)(new WeatherType(WeatherType::Drizzle));
-            $weather->recommendation = (string) (new \App\Decision\DecisionType($lat));
+            $weather->decision = (string) (new \App\Decision\DecisionType($lat));
         }
         else
         {
@@ -52,7 +52,7 @@ class ApiController extends AbstractController
             $conditions = $ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
 
             $weather = $AverageWeatherConditionsCalculator->calculate($conditions);
-            $weather->recommendation = $DecisionMaker->checkWeatherForRunning($weather);
+            $weather->decision = $DecisionMaker->checkWeatherForRunning($weather);
         }
 
         $response = new Response();
