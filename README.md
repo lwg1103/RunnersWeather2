@@ -1,3 +1,6 @@
+## 0.7.1 
+added current time to api response
+
 # 0.7 initial map and location provider (working on desktop)
 
 # 0.6 decision maker

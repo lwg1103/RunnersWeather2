@@ -3,7 +3,6 @@
 namespace App\Conditions;
 
 use App\Conditions\WeatherConditions;
-use App\Conditions\WeatherType;
 
 class AverageWeatherConditionsCalculator
 {

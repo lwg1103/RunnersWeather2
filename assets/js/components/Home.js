@@ -103,6 +103,7 @@ class Home extends Component {
                     <p>Wind: {this.state.conditions.wind} m/s</p>
                     <p>Humidity: {this.state.conditions.humidity} %</p>
                     <p>Decision: {this.state.conditions.decision.name}</p>
+                    <p>Time: {this.state.conditions.datetime.date}</p>
                 </div>
                 )
     }
