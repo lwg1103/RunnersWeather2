@@ -1,3 +1,5 @@
+# 0.7 initial map and location provider (working on desktop)
+
 # 0.6 decision maker
 
 # 0.5 average conditions calculator
