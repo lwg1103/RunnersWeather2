@@ -31,6 +31,8 @@ class Home extends Component {
     {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.savePosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
         }
     }
 
