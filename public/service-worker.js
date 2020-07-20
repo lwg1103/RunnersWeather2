@@ -5,12 +5,11 @@ self.addEventListener('install', function (event) {
             .then(function (cache) {
                 return cache.addAll(
                         [
-                            '/build/app.css',
-                            '/build/app.js',
-                            '/build/entrypoints.json',
-                            '/build/manifest.json',
-                            '/build/runtime.js',
-                            '/build/vendors~app.js',
+                            'maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+                            'https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700',
+                            '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
+                            '/images/icon192.png',
+                            '/images/icon512.png',
                             '/offline.html'
                         ]
                         );
