@@ -9,6 +9,8 @@ import Screen from '../dict/Screen';
 class Home extends Component {
 
     constructor(props) {
+        var registration;
+
         super(props);
 
         this.state = {
@@ -23,8 +25,27 @@ class Home extends Component {
         this.navigateTo = this.navigateTo.bind(this);
         this.updatePosition = this.updatePosition.bind(this);
         this.savePosition = this.savePosition.bind(this);
+        this.showNotification = this.showNotification.bind(this);
 
         this.updatePosition();
+
+        this.registerNotification();
+    }
+
+    async registerNotification()
+    {
+        this.registration = await navigator.serviceWorker.getRegistration();
+    }
+
+    showNotification(text, timestamp)
+    {
+        Notification.requestPermission().then(permission => {
+            if (permission !== 'granted') {
+                alert('you need to allow push notifications');
+            } else {
+                this.registration.showNotification(text);
+            }
+        });
     }
 
     updatePosition()
@@ -60,6 +81,7 @@ class Home extends Component {
             conditions: result,
             screen: Screen.RecommendationDetails
         });
+        this.showNotification("Weather for running: " + this.state.conditions.decision.name);
     }
 
     navigateTo(screen) {

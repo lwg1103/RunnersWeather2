@@ -13,7 +13,7 @@ class CheckButton extends Component {
     }
     
     checkWeather() {
-        let url = "/api/weather/"+this.props.lat+"/"+this.props.long;
+        let url = "/api/weather/" + this.props.lat + "/" + this.props.long;
         fetch(url)
             .then(res => res.json())
             .then(
@@ -23,7 +23,7 @@ class CheckButton extends Component {
                 (error) => {
                     console.log(error);
                 }
-            )
+                )
     }
     
     render() {
