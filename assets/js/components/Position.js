@@ -6,7 +6,7 @@ class Position extends Component {
     
     render() {
         return(
-            <div>
+                <div className="position">
                 <form>
                     <Container fluid="xs">
                         <Row>

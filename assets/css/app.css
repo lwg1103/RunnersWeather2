@@ -18,19 +18,22 @@
 html, 
 body {
     height: 100%;
-}
-
-body {
+    overflow: auto;
     background-color: lightgray;
+    touch-action: none;
 }
 
 .position {
-    width: 100%;
+    width: 96%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
 .main-btn {
-    width: 100%;
+    width: 96%;
     height: 25%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
 .map {
