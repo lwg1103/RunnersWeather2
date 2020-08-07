@@ -11,30 +11,50 @@ abstract class ConditionsProviderBase extends TestCase
 {
     /** @var IConditionsProvider */
     protected $ConditionsProvider;
+    protected $responseMock;
+    /** @var \App\Conditions\WeatherConditions */
     protected $result;
 
     public function testGetCurrentConditionsReturnsResult()
     {
-        $this->whenGetConditions()
+        $this->givenResponseIsOk()
+                ->whenGetConditions()
                 ->thenResultIsNotNull();
+    }
+
+    public function testGetCurrentConditionsReturnsResultWithoutError()
+    {
+        $this->givenResponseIsOk()
+                ->whenGetConditions()
+                ->thenResultHasNoError();
     }
 
     public function testGetCurrentConditionsReturnsWeatherConditions()
     {
-        $this->whenGetConditions()
+        $this->givenResponseIsOk()
+                ->whenGetConditions()
                 ->thenResultIsWeatherConditionsType();
     }
 
     public function testGetCurrentConditionsReturnsWeatherConditionsWithValues()
     {
-        $this->whenGetConditions()
+        $this->givenResponseIsOk()
+                ->whenGetConditions()
                 ->thenResultHasValues();
     }
 
     public function testGetCurrentConditionsReturnsWeatherConditionsWithValuesFromResponse()
     {
-        $this->whenGetConditions()
+        $this->givenResponseIsOk()
+                ->whenGetConditions()
                 ->thenResultHasResponseValues();
+    }
+
+    protected function givenResponseIsOk()
+    {
+        $this->responseMock = $this->getHttpResponseMock();
+
+        return $this;
     }
 
     protected function whenGetConditions()
@@ -47,6 +67,13 @@ abstract class ConditionsProviderBase extends TestCase
     protected function thenResultIsNotNull()
     {
         $this->assertNotNull($this->result);
+
+        return $this;
+    }
+
+    protected function thenResultHasNoError()
+    {
+        $this->assertFalse($this->result->error);
 
         return $this;
     }
@@ -72,7 +99,10 @@ abstract class ConditionsProviderBase extends TestCase
                 ->getMock();
 
         $responseMock->method('getContent')
-                ->willReturn($this->getHttpResponseMock());
+                ->will($this->returnCallback(function()
+                        {
+                            return $this->responseMock;
+                        }));
 
         $HttpClientMock->method('get')
                 ->willReturn($responseMock);
