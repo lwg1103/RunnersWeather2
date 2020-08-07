@@ -1,3 +1,6 @@
+## 0.7.4
+fixed bug when airly provider was not available in the area
+
 ## 0.7.3
 api keys moved to configuration files
 

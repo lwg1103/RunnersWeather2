@@ -30,6 +30,25 @@ class AverageWeatherConditionsCalculatorTest extends TestCase
         $this->assertEquals($expected->wind, $actual->wind);
     }
 
+    public function testCalculateAveragesSkipConditionsWithError()
+    {
+        $input = [
+            $this->createWeatherConditions(5.2, 10.4, 15.1, 89.0, 2.0),
+            $this->createWeatherConditions(5.4, 15.4, 25.1, 88, 3),
+            $this->createWeatherConditions(50.4, 150.4, 250.1, 880, 3, true),
+        ];
+
+        $expected = $this->createWeatherConditions(5.3, 12.9, 20.1, 88.5, 2.5);
+
+        $actual = $this->AverageWeatherConditionsCalculator->calculate($input);
+
+        $this->assertEquals($expected->pm10, $actual->pm10);
+        $this->assertEquals($expected->pm25, $actual->pm25);
+        $this->assertEquals($expected->temperature, $actual->temperature);
+        $this->assertEquals($expected->humidity, $actual->humidity);
+        $this->assertEquals($expected->wind, $actual->wind);
+    }
+
     public function testCalculateAveragesWithNullValues()
     {
         $input = [
@@ -76,7 +95,7 @@ class AverageWeatherConditionsCalculatorTest extends TestCase
         $this->AverageWeatherConditionsCalculator = new AverageWeatherConditionsCalculator;
     }
 
-    private function createWeatherConditions($pm10, $pm25, $temp, $hum, $wind)
+    private function createWeatherConditions($pm10, $pm25, $temp, $hum, $wind, $error = false)
     {
         $conditions = new WeatherConditions;
 
@@ -85,6 +104,7 @@ class AverageWeatherConditionsCalculatorTest extends TestCase
         $conditions->temperature = $temp;
         $conditions->humidity    = $hum;
         $conditions->wind        = $wind;
+        $conditions->error       = $error;
 
         return $conditions;
     }

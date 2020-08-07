@@ -14,7 +14,7 @@ class OpenWeatherConditionsProviderTest extends ConditionsProviderBase
     
     protected function createTestSubject(IHttpClient $client): IConditionsProvider
     {
-        return new OpenWeatherConditionsProvider($client);
+        return new OpenWeatherConditionsProvider($client, 'key');
     }
 
     protected function getHttpResponseMock(): string

@@ -14,12 +14,14 @@ class AirlyConditionsProviderTest extends ConditionsProviderBase
 
     public function testNoDataResponseReturnsErrorMessage()
     {
-        
+        $this->givenResponseHasNoData()
+                ->whenGetConditions()
+                ->thenResultHasError();
     }
 
     protected function createTestSubject(IHttpClient $client): IConditionsProvider
     {
-        return new AirlyConditionsProvider($client);
+        return new AirlyConditionsProvider($client, 'key');
     }
 
     protected function getHttpResponseMock(): string
@@ -43,6 +45,18 @@ class AirlyConditionsProviderTest extends ConditionsProviderBase
         $this->assertEquals(15.85, $this->result->pm25);
         $this->assertEquals(5.07, $this->result->temperature);
         $this->assertEquals(87.03, $this->result->humidity);
+    }
+
+    private function thenResultHasError()
+    {
+        $this->assertTrue($this->result->error);
+    }
+
+    private function givenResponseHasNoData()
+    {
+        $this->responseMock = self::APINoDataResponse;
+
+        return $this;
     }
 
 }
