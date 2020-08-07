@@ -24,6 +24,8 @@ class WeatherConditions
     public $decision;
     /** @var DateTime */
     public $datetime;
+    /** @var bool */
+    public $error    = false;
 
     public function __construct()
     {

@@ -26,22 +26,27 @@ class AirlyConditionsProvider implements IConditionsProvider
 
         $Conditions           = new WeatherConditions;
         $Conditions->provider = 'Airly';
+        $Conditions->error    = true;
 
         foreach ($parsedResponse['current']['values'] as $valueRow)
         {
             switch ($valueRow['name'])
             {
                 case 'PM25':
-                    $Conditions->pm25 = $valueRow['value'];
+                    $Conditions->pm25        = $valueRow['value'];
+                    $Conditions->error       = false;
                     break;
                 case 'PM10':
-                    $Conditions->pm10 = $valueRow['value'];
+                    $Conditions->pm10        = $valueRow['value'];
+                    $Conditions->error       = false;
                     break;
                 case 'HUMIDITY':
                     $Conditions->humidity    = $valueRow['value'];
+                    $Conditions->error       = false;
                     break;
                 case 'TEMPERATURE':
                     $Conditions->temperature = $valueRow['value'];
+                    $Conditions->error       = false;
                     break;
             }
         }

@@ -10,19 +10,7 @@ class AverageWeatherConditionsCalculator
 
     public function calculate(array $conditions): WeatherConditions
     {
-        $data = [];
-        /** @var WeatherConditions $condition */
-        foreach ($conditions as $condition)
-        {
-            foreach (self::FLOAT_FIELDS as $field)
-            {
-                if (!is_null($condition->$field))
-                {
-                    $data[$field][] = $condition->$field;
-                }
-            }
-            $data['type'][] = $condition->type;
-        }
+        $data = $this->prepareInputData($conditions);
 
         $averageConditions           = new WeatherConditions;
         $averageConditions->provider = "Averages (calculated)";
@@ -42,6 +30,30 @@ class AverageWeatherConditionsCalculator
         }
 
         return $averageConditions;
+    }
+
+    private function prepareInputData(array $conditions)
+    {
+        $data = [];
+        /** @var WeatherConditions $condition */
+        foreach ($conditions as $condition)
+        {
+            if ($condition->error)
+            {
+                continue;
+            }
+
+            foreach (self::FLOAT_FIELDS as $field)
+            {
+                if (!is_null($condition->$field))
+                {
+                    $data[$field][] = $condition->$field;
+                }
+            }
+            $data['type'][] = $condition->type;
+        }
+
+        return $data;
     }
 
 }
