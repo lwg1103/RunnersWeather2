@@ -7,16 +7,15 @@ use App\HttpClient\IHttpClient;
 
 class AirlyConditionsProvider implements IConditionsProvider
 {
-    const APIKey = "TcY7Pv87COniLs8ySsanDClgwG3hUTBn";
-    const URL    = "https://airapi.airly.eu/v2/measurements/point?";
+    const URL = "https://airapi.airly.eu/v2/measurements/point?";
 
     /** @var HttpClient */
     private $HttpClient;
 
-    public function __construct(IHttpClient $HttpClient)
+    public function __construct(IHttpClient $HttpClient, string $apiKey)
     {
         $this->HttpClient = $HttpClient;
-        $this->HttpClient->setApiKey(self::APIKey);
+        $this->HttpClient->setApiKey($apiKey);
     }
 
     public function getCurrentConditionsForCoordinates(float $long, float $lat): WeatherConditions

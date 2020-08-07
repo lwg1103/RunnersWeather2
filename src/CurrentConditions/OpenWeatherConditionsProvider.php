@@ -9,19 +9,21 @@ use App\Conditions\WeatherType;
 class OpenWeatherConditionsProvider implements IConditionsProvider
 {
     const BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?';
-    const API_KEY  = '598a3759e9f51043aaf6e2caa4288b8a';
 
     /** @var HttpClient */
     private $HttpClient;
+    /** @var string */
+    private $apiKey;
 
-    public function __construct(IHttpClient $HttpClient)
+    public function __construct(IHttpClient $HttpClient, string $apiKey)
     {
         $this->HttpClient = $HttpClient;
+        $this->apiKey     = $apiKey;
     }
 
     public function getCurrentConditionsForCoordinates(float $long, float $lat): WeatherConditions
     {
-        $response = $this->HttpClient->get(self::BASE_URL . "lat={$lat}&lon={$long}&appid=" . self::API_KEY);
+        $response = $this->HttpClient->get(self::BASE_URL . "lat={$lat}&lon={$long}&appid=" . $this->apiKey);
 
         $parsedResponse = json_decode($response->getContent(), true);
 

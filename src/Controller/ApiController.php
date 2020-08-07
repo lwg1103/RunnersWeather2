@@ -11,6 +11,8 @@ use App\CurrentConditions\IConditionsChecker;
 use App\HttpClient\IHttpClient;
 use App\Conditions\AverageWeatherConditionsCalculator;
 use App\Decision\IDecisionMaker;
+use App\CurrentConditions\AirlyConditionsProvider;
+use App\CurrentConditions\OpenWeatherConditionsProvider;
 
 /**
  * @Route("/api")
@@ -46,8 +48,13 @@ class ApiController extends AbstractController
         }
         else
         {
-            $ConditionsChecker->registerConditionsProvider(new \App\CurrentConditions\AirlyConditionsProvider($HttpClient));
-            $ConditionsChecker->registerConditionsProvider(new \App\CurrentConditions\OpenWeatherConditionsProvider($HttpClient));
+            $ConditionsChecker->registerConditionsProvider(
+                    new AirlyConditionsProvider($HttpClient, $this->getParameter('api.airly'))
+            );
+
+            $ConditionsChecker->registerConditionsProvider(
+                    new OpenWeatherConditionsProvider($HttpClient, $this->getParameter('api.openweather'))
+            );
 
             $conditions = $ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
 

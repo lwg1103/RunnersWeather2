@@ -1,3 +1,6 @@
+## 0.7.3
+api keys moved to configuration files
+
 ## 0.7.2
 fixed overscroll issue
 
