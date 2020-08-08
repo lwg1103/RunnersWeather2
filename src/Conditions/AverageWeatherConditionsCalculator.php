@@ -17,7 +17,10 @@ class AverageWeatherConditionsCalculator
 
         foreach (self::FLOAT_FIELDS as $field)
         {
-            $averageConditions->$field = array_sum($data[$field]) / count($data[$field]);
+            if (isset($data[$field]))
+            {
+                $averageConditions->$field = array_sum($data[$field]) / count($data[$field]);
+            }
         }
         
         foreach ($data['type'] as $type)
