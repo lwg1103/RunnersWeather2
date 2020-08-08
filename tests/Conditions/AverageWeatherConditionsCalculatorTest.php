@@ -49,6 +49,24 @@ class AverageWeatherConditionsCalculatorTest extends TestCase
         $this->assertEquals($expected->wind, $actual->wind);
     }
 
+    public function testCalculateAveragesSetZerosForSmogDataIfAirlyIsMissing()
+    {
+        $input = [
+            $this->createWeatherConditions(null, null, 10, 90.0, 2.0),
+            $this->createWeatherConditions(null, null, null, null, null, true),
+        ];
+
+        $expected = $this->createWeatherConditions(0, 0, 10, 90, 2);
+
+        $actual = $this->AverageWeatherConditionsCalculator->calculate($input);
+
+        $this->assertEquals($expected->pm10, $actual->pm10);
+        $this->assertEquals($expected->pm25, $actual->pm25);
+        $this->assertEquals($expected->temperature, $actual->temperature);
+        $this->assertEquals($expected->humidity, $actual->humidity);
+        $this->assertEquals($expected->wind, $actual->wind);
+    }
+
     public function testCalculateAveragesWithNullValues()
     {
         $input = [

@@ -1,3 +1,6 @@
+## 0.7.5
+fixed bug when averages failes is airly was missing
+
 ## 0.7.4
 fixed bug when airly provider was not available in the area
 
