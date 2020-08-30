@@ -7,14 +7,22 @@ use App\CurrentConditions\ConditionsChecker;
 use App\CurrentConditions\Exception\NoProvidersRegistered;
 use App\Conditions\WeatherConditions;
 use App\CurrentConditions\IConditionsProvider;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class ConditionsCheckerTest extends TestCase
 {
-    const LONG = 12.34;
-    const LAT  = 56.78;
+    const LONG         = 12.345678;
+    const LAT          = 56.789012;
+    const LONG_ROUNDED = 12.35;
+    const LAT_ROUNDED  = 56.79;
 
     /** @var ConditionsChecker */
     private $ConditionsChecker;
+    /** @var AdapterInterface */
+    private $CacheAdapterMock;
+    /** @var ItemInterface */
+    private $CacheItemMock;
     private $result;
 
     public function testThrowsExceptionIfNoProvidersRegistered()
@@ -28,6 +36,7 @@ class ConditionsCheckerTest extends TestCase
         $WeatherConditions = new WeatherConditions;
 
         $this->givenProviderWasRegistered($WeatherConditions)
+                ->givenThereAreNoCachedConditions()
                 ->whenRunGetConditions()
                 ->thenResultHasXConditions(1)
                 ->thenResultContains($WeatherConditions);
@@ -40,17 +49,32 @@ class ConditionsCheckerTest extends TestCase
 
         $this->givenProviderWasRegistered($WeatherConditions1)
                 ->givenProviderWasRegistered($WeatherConditions2)
+                ->givenThereAreNoCachedConditions()
                 ->whenRunGetConditions()
                 ->thenResultHasXConditions(2)
                 ->thenResultContains($WeatherConditions1)
                 ->thenResultContains($WeatherConditions2);
     }
 
+    public function testReturnsCachedConditionsIfSet()
+    {
+        $WeatherConditions       = new WeatherConditions;
+        $CachedWeatherConditions = new WeatherConditions;
+
+        $this->givenProviderWasRegistered($WeatherConditions)
+                ->givenThereAreCachedConditions($CachedWeatherConditions)
+                ->whenRunGetConditions()
+                ->thenResultHasXConditions(1)
+                ->thenResultContains($CachedWeatherConditions);
+    }
+
     protected function setUp()
     {
         parent::setUp();
 
-        $this->ConditionsChecker = new ConditionsChecker;
+        $this->setUpCacheAdapterMock();
+
+        $this->ConditionsChecker = new ConditionsChecker($this->CacheAdapterMock);
     }
 
     private function givenProviderWasRegistered(WeatherConditions $CurrentWeather)
@@ -59,12 +83,34 @@ class ConditionsCheckerTest extends TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $provider->expects($this->once())
+        $provider->expects($this->any())
                 ->method('getCurrentConditionsForCoordinates')
-                ->with(self::LONG, self::LAT)
+                ->with(self::LONG_ROUNDED, self::LAT_ROUNDED)
                 ->willReturn($CurrentWeather);
 
         $this->ConditionsChecker->registerConditionsProvider($provider);
+
+        return $this;
+    }
+
+    private function givenThereAreNoCachedConditions()
+    {
+        $this->CacheItemMock->method('isHit')
+                ->willReturn(false);
+
+        $this->CacheItemMock->method('set')
+                ->willReturnSelf();
+
+        return $this;
+    }
+
+    private function givenThereAreCachedConditions(WeatherConditions $CachedWeatherConditions)
+    {
+        $this->CacheItemMock->method('isHit')
+                ->willReturn(true);
+
+        $this->CacheItemMock->method('get')
+                ->willReturn([$CachedWeatherConditions]);
 
         return $this;
     }
@@ -89,6 +135,20 @@ class ConditionsCheckerTest extends TestCase
         $this->assertContains($WeatherConditions, $this->result);
 
         return $this;
+    }
+
+    private function setUpCacheAdapterMock()
+    {
+        $this->CacheAdapterMock = $this->getMockBuilder(AdapterInterface::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+        $this->CacheItemMock = $this->getMockBuilder(ItemInterface::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+        $this->CacheAdapterMock->method('getItem')
+                ->willReturn($this->CacheItemMock);
     }
 
 }
