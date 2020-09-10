@@ -4,7 +4,6 @@ namespace App\CurrentConditions;
 
 use App\CurrentConditions\Exception\NoProvidersRegistered;
 use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class ConditionsChecker implements IConditionsChecker
 {
@@ -13,9 +12,9 @@ class ConditionsChecker implements IConditionsChecker
     /** @var CacheInterface */
     private $Cache;
 
-    public function __construct(AdapterInterface $CacheAdapter)
+    public function __construct(CacheInterface $CachePool)
     {
-        $this->Cache = $CacheAdapter;
+        $this->Cache = $CachePool;
     }
 
     public function getCurrentConditionsForCoordinates(float $long, float $lat): array
