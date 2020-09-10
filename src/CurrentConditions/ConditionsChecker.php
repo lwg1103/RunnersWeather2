@@ -3,16 +3,16 @@
 namespace App\CurrentConditions;
 
 use App\CurrentConditions\Exception\NoProvidersRegistered;
-use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class ConditionsChecker implements IConditionsChecker
 {
     /** @var IConditionsProvider[] */
     private $ConditionsProviders = [];
-    /** @var CacheInterface */
+    /** @var AdapterInterface */
     private $Cache;
 
-    public function __construct(CacheInterface $CachePool)
+    public function __construct(AdapterInterface $CachePool)
     {
         $this->Cache = $CachePool;
     }
