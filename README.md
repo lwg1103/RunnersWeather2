@@ -1,3 +1,6 @@
+## 0.7.6 
+performance improvements - cache chain added
+
 ## 0.7.5
 fixed bug when averages failes is airly was missing
 
