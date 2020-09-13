@@ -20,7 +20,7 @@ class AirlyConditionsProvider implements IConditionsProvider
 
     public function getCurrentConditionsForCoordinates(float $long, float $lat): WeatherConditions
     {
-        $response = $this->HttpClient->get(self::URL . "lat={$lat}&lng={$long}");
+        $response = $this->HttpClient->get(self::URL, ['lat' => $lat, 'lng' => $long]);
 
         $parsedResponse = json_decode($response->getContent(), true);
 

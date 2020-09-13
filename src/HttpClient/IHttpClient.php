@@ -6,5 +6,5 @@ interface IHttpClient
 {
     public function setApiKey(string $key);
 
-    public function get(string $url);
+    public function get(string $url, array $query);
 }

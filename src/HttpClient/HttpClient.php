@@ -16,16 +16,11 @@ class HttpClient implements IHttpClient
         $this->SymfonyHttpClient = SymfonyHttpClient::create();
     }
 
-    public function get(string $url)
+    public function get(string $url, array $query)
     {
-        if ($this->options !== [])
-        {
-            return $this->SymfonyHttpClient->request('GET', $url, $this->options);
-        }
-        else
-        {
-            return $this->SymfonyHttpClient->request('GET', $url);
-        }
+        $this->options['query'] = $query;
+
+        return $this->SymfonyHttpClient->request('GET', $url, $this->options);
     }
 
     public function setApiKey(string $key)

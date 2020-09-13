@@ -23,7 +23,10 @@ class OpenWeatherConditionsProvider implements IConditionsProvider
 
     public function getCurrentConditionsForCoordinates(float $long, float $lat): WeatherConditions
     {
-        $response = $this->HttpClient->get(self::BASE_URL . "lat={$lat}&lon={$long}&appid=" . $this->apiKey);
+        $response = $this->HttpClient->get(
+                self::BASE_URL,
+                ['lat' => $lat, 'lon' => $long, 'appid' => $this->apiKey]
+        );
 
         $parsedResponse = json_decode($response->getContent(), true);
 
