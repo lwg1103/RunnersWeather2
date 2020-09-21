@@ -1,23 +1,16 @@
-## 0.7.6 
-performance improvements - cache chain added
-
-## 0.7.5
-fixed bug when averages failes is airly was missing
-
-## 0.7.4
-fixed bug when airly provider was not available in the area
-
-## 0.7.3
-api keys moved to configuration files
-
-## 0.7.2
-fixed overscroll issue
-
-## 0.7.1 
-added current time to api response
+# 0.8.0
+morning notification
 
 # 0.7 
 initial map and location provider (working on desktop)
+
+minor changes:
+added current time to api response
+performance improvements - cache chain added
+
+bugfixes:
+crash if airly provider was not available in the area
+averages failes if airly provider was missing
 
 # 0.6 
 decision maker

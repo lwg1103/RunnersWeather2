@@ -30,11 +30,24 @@ class Home extends Component {
         this.updatePosition();
 
         this.registerNotification();
+        this.scheduleBackgroundSync();
     }
 
     async registerNotification()
     {
         this.registration = await navigator.serviceWorker.getRegistration();
+    }
+
+    async scheduleBackgroundSync()
+    {
+        if (!navigator.serviceWorker) {
+            return console.error("Service Worker not supported")
+        }
+
+        navigator.serviceWorker.ready
+                .then(registration => registration.sync.register('sync-weather'))
+                .then(() => console.log("Registered background sync"))
+                .catch(err => console.error("Error registering background sync", err));
     }
 
     showNotification(text, timestamp)
