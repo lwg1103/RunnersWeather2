@@ -27,3 +27,21 @@ self.addEventListener('fetch', event => {
             })
             );
 });
+
+self.onsync = event => {
+    if (event.tag === 'sync-weather') {
+        event.waitUntil(syncWeather());
+    }
+}
+
+function syncWeather() {
+    if ((new Date()).getHours() === 8) {
+        fetch('/api/weather/51.08613/17.05629')
+                .then(response => response.json())
+                .then(
+                        function (result) {
+                            self.registration.showNotification(`${result.decision.name} weather now`);
+                        }
+                )
+    }
+}
