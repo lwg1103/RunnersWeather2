@@ -1,9 +1,19 @@
 {% extends 'base.html.twig' %}
     
- {% block title %} Symfony React Project {% endblock %}
+ {% block title %} RunnersWeather2 API {% endblock %}
     
  {% block body %}
-    
-     <div id="root"></div>
+     <table>
+         <tr>
+            <th>Endpoint</th>
+            <th>Method</th>
+            <th>Parameters</th>
+         </tr>
+         <tr>
+            <td>/api/weather/{lat}/{long}</td>
+            <td>GET</td>
+            <td>lat - lattitude, float<br/>long - longitude, float</td>
+         </tr>
+     </table>
     
  {% endblock %}

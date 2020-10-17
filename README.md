@@ -1,5 +1,8 @@
+### 0.8.1
+divided front and backend application
+
 # 0.8.0
-morning notification
+morning notification - abandoned
 
 # 0.7 
 initial map and location provider (working on desktop)
