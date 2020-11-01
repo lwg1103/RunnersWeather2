@@ -1,0 +1,16 @@
+fos_elastica:
+    clients:
+        default: { host: '%env(resolve:es_host)%', port: '%env(resolve:es_port)%' }
+    indexes:
+        app:
+            use_alias: true
+            types:
+                api_request_log:
+                    properties:
+                        type: ~
+                        name: ~
+                        slug: ~
+                        keyword: ~
+                    persistence:
+                        driver: orm
+                        model: ApiRequest\Entity\ApiRequestLog
