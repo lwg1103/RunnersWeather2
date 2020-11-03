@@ -1,3 +1,6 @@
+### 0.8.2
+gather api stats in elasticsearch
+
 ### 0.8.1
 divided front and backend application
 
@@ -33,5 +36,10 @@ simple recommendation screen
 # 0.1 
 initial version
 
-# deployment
+# info
+
+### deployment
 ansible-playbook -i etc/hosts etc/deploy/deploy.yml
+
+### front repository
+https://github.com/lwg1103/RunnersWeather2-front

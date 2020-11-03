@@ -7,10 +7,9 @@ fos_elastica:
             types:
                 api_request_log:
                     properties:
-                        type: ~
-                        name: ~
-                        slug: ~
-                        keyword: ~
+                        longitude: ~
+                        latitude: ~
+                        user: ~
                     persistence:
                         driver: orm
-                        model: ApiRequest\Entity\ApiRequestLog
+                        model: App\Entity\ApiRequest\ApiRequestLog
