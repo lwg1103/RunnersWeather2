@@ -5,22 +5,21 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
-use App\Conditions\WeatherConditions;
-use App\Conditions\WeatherType;
 use App\CurrentConditions\IConditionsChecker;
 use App\HttpClient\IHttpClient;
 use App\Conditions\AverageWeatherConditionsCalculator;
 use App\Decision\IDecisionMaker;
 use App\CurrentConditions\AirlyConditionsProvider;
 use App\CurrentConditions\OpenWeatherConditionsProvider;
+use App\Logger\IApiCallLogger;
 
 /**
  * @Route("/api")
  */
 class ApiController extends AbstractController
 {
+
     /**
-     * 
      * @Route("/weather/{lat}/{long}", name="get_weather")
      * @param float $lat
      * @param float $long
@@ -32,35 +31,23 @@ class ApiController extends AbstractController
             IConditionsChecker $ConditionsChecker,
             IDecisionMaker $DecisionMaker,
             AverageWeatherConditionsCalculator $AverageWeatherConditionsCalculator,
-            IHttpClient $HttpClient)
+            IHttpClient $HttpClient,
+            IApiCallLogger $Logger)
     {
-        //TODO this is a mock controller, only for development phase
-        if ($long === 1.0)
-        {
-            $weather = new WeatherConditions;
-            $weather->pm10 = 10.1;
-            $weather->pm25 = 25.2;
-            $weather->temperature = 22.23;
-            $weather->humidity = 45.67;
-            $weather->wind = 12.34;
-            $weather->type = (string)(new WeatherType(WeatherType::Drizzle));
-            $weather->decision = (string) (new \App\Decision\DecisionType($lat));
-        }
-        else
-        {
-            $ConditionsChecker->registerConditionsProvider(
-                    new AirlyConditionsProvider($HttpClient, $this->getParameter('api.airly'))
-            );
+        $Logger->log($lat, $long);
 
-            $ConditionsChecker->registerConditionsProvider(
-                    new OpenWeatherConditionsProvider($HttpClient, $this->getParameter('api.openweather'))
-            );
+        $ConditionsChecker->registerConditionsProvider(
+                new AirlyConditionsProvider($HttpClient, $this->getParameter('api.airly'))
+        );
 
-            $conditions = $ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
+        $ConditionsChecker->registerConditionsProvider(
+                new OpenWeatherConditionsProvider($HttpClient, $this->getParameter('api.openweather'))
+        );
 
-            $weather = $AverageWeatherConditionsCalculator->calculate($conditions);
-            $weather->decision = $DecisionMaker->checkWeatherForRunning($weather);
-        }
+        $conditions = $ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
+
+        $weather = $AverageWeatherConditionsCalculator->calculate($conditions);
+        $weather->decision = $DecisionMaker->checkWeatherForRunning($weather);
 
         $response = new Response();
 
@@ -71,4 +58,5 @@ class ApiController extends AbstractController
 
         return $response;
     }
+
 }
