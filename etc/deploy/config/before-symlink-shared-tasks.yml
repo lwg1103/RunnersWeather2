@@ -18,3 +18,5 @@
   shell: yarn encore production
   args:
     chdir: "{{ ansistrano_release_path.stdout }}/"
+- name: Create DB if not exists
+  command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists --env=prod'
