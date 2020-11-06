@@ -18,14 +18,14 @@ class ApiRequestLog {
     private $id;
 
     /**
-     * @var int
-     * @ORM\Column(type="integer")
+     * @var float
+     * @ORM\Column(type="float")
      */
     private $longitude;
 
     /**
-     * @var int
-     * @ORM\Column(type="integer")
+     * @var float
+     * @ORM\Column(type="float")
      */
     private $latitude;
 
@@ -35,7 +35,7 @@ class ApiRequestLog {
      */
     private $user;
 
-    public function __construct(int $long, int $lat, int $user) {
+    public function __construct( float $lat, float $long, int $user) {
         $this->longitude = $long;
         $this->latitude = $lat;
         $this->user = $user;
@@ -45,11 +45,11 @@ class ApiRequestLog {
         return $this->id;
     }
 
-    public function getLongitude(): int {
+    public function getLongitude(): float {
         return $this->longitude;
     }
 
-    public function getLatitude(): int {
+    public function getLatitude(): float {
         return $this->latitude;
     }
 

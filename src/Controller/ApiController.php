@@ -11,12 +11,14 @@ use App\Conditions\AverageWeatherConditionsCalculator;
 use App\Decision\IDecisionMaker;
 use App\CurrentConditions\AirlyConditionsProvider;
 use App\CurrentConditions\OpenWeatherConditionsProvider;
+use App\Logger\IApiCallLogger;
 
 /**
  * @Route("/api")
  */
 class ApiController extends AbstractController
 {
+
     /**
      * @Route("/weather/{lat}/{long}", name="get_weather")
      * @param float $lat
@@ -30,12 +32,10 @@ class ApiController extends AbstractController
             IDecisionMaker $DecisionMaker,
             AverageWeatherConditionsCalculator $AverageWeatherConditionsCalculator,
             IHttpClient $HttpClient,
-            \Doctrine\ORM\EntityManagerInterface $e)
+            IApiCallLogger $Logger)
     {
-        $ApiLog = new \App\Entity\ApiRequest\ApiRequestLog((int)$long, (int)$lat, 1);
-        $e->persist($ApiLog);
-        $e->flush();
-        
+        $Logger->log($lat, $long);
+
         $ConditionsChecker->registerConditionsProvider(
                 new AirlyConditionsProvider($HttpClient, $this->getParameter('api.airly'))
         );
@@ -58,4 +58,5 @@ class ApiController extends AbstractController
 
         return $response;
     }
+
 }
