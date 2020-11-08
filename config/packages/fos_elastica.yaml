@@ -10,6 +10,7 @@ fos_elastica:
                         longitude: ~
                         latitude: ~
                         user: ~
+                        date_time: ~
                     persistence:
                         driver: orm
                         model: App\Entity\ApiRequest\ApiRequestLog

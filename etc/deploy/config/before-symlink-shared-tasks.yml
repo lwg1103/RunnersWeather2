@@ -10,5 +10,3 @@
   shell: mkdir cache
   args:
     chdir: "{{ ansistrano_release_path.stdout }}/var"
-- name: Create DB if not exists
-  command: '{{ ansistrano_release_path.stdout }}/{{ symfony_console_path }} doctrine:database:create --if-not-exists --env=prod'
