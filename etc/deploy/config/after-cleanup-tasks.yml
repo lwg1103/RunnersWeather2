@@ -10,3 +10,7 @@
   shell: chmod -R 777 prod
   args:
     chdir: "{{ ansistrano_release_path.stdout }}/var/cache"
+- name: Create DB if not exists
+  command: '{{ ansistrano_deploy_to }}/{{ ansistrano_current_dir }}/{{ symfony_console_path }} doctrine:database:create --if-not-exists --env=prod'
+- name: Migrate DB
+  command: '{{ ansistrano_deploy_to }}/{{ ansistrano_current_dir }}/{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction --allow-no-migration'

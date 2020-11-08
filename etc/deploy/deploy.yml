@@ -24,7 +24,6 @@
       #   - path/to/file.txt
       ansistrano_shared_paths:
         - var/log
-        - var/cache
       ansistrano_shared_files:
         - .env
 
