@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+    
+ {% block title %} RunnersWeather2 API {% endblock %}
+    
+ {% block body %}
+     <p><a href="{{ path('api_requests_by_time') }}">Requests by time</a></p>
+     <p><a href="{{ path('api_requests_by_decision') }}">Requests by decision</a></p>
+    
+ {% endblock %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,13 +14,13 @@ use App\CurrentConditions\OpenWeatherConditionsProvider;
 use App\Logger\IApiCallLogger;
 
 /**
- * @Route("/api")
+ * @Route("/weather")
  */
-class ApiController extends AbstractController
+class WeatherController extends AbstractController
 {
 
     /**
-     * @Route("/weather/{lat}/{long}", name="get_weather")
+     * @Route("/{lat}/{long}", name="get_weather")
      * @param float $lat
      * @param float $long
      * @return \Symfony\Component\HttpFoundation\JsonResponse
