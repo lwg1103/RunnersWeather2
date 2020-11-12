@@ -1,6 +1,10 @@
 controllers:
     resource: ../../src/Controller/DefaultController.php
     type: annotation
+    
+security_controllers:
+    resource: ../../src/Controller/SecurityController.php
+    type: annotation
 
 kernel:
     resource: ../../src/Kernel.php
