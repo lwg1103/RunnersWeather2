@@ -80,4 +80,9 @@ class ApiRequestLog
         $this->DateTime = $DateTime;
     }
 
+    public function getHour(): string
+    {
+        return $this->DateTime->format('H');
+    }
+
 }

@@ -4,36 +4,41 @@ namespace App\Controller\Api;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use FOS\ElasticaBundle\Elastica\Client;
 
 /**
  * @Route("/stats")
  */
 class StatsController extends AbstractController
-{    
+{   
+    /** @var Client */
+    private $ElasticaClient;
+    
+    public function __construct(Client $ElasticaClient)
+    {
+        $this->ElasticaClient = $ElasticaClient;
+    }
+    
     /**
      * @Route("/api-request/group/time", name="requests_by_time")
      */
     public function getApiRequestByTime()
     {
-        $response = new Response();
+        $query = new \Elastica\Query();
+        $agg = new \Elastica\Aggregation\Terms('hours');
+        $agg->setField('hour');
+        $agg->setSize(10);
+        $query->addAggregation($agg);
+        
+        $findings = $this->ElasticaClient->getIndex('api_request')->search($query)->getAggregation("hours");
+        
+        $results = [];
+        foreach ($findings['buckets'] as $bucket) {
+            $results[$bucket['key']] = $bucket['doc_count'];
+        }
 
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-
-        $response->setContent(json_encode([
-            0 => 0,
-            1 => 0,
-            2 => 2,
-            3 => 4,
-            5 => 8,
-            6 => 5,
-            7 => 1,
-            8 => 0,
-            9 => 0
-        ]));
-
-        return $response;
+        return new JsonResponse($results);
     }
     
     /**
@@ -41,19 +46,12 @@ class StatsController extends AbstractController
      */
     public function getApiRequestByDecision()
     {
-        $response = new Response();
-
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-
-        $response->setContent(json_encode([
+        return new JsonResponse([
             'ok' => 15,
             'low smog' => 2,
             'high smog' => 2,
             'rain' => 4,
             'too hot' => 0
-        ]));
-
-        return $response; 
+        ]);; 
     }
 }
