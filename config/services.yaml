@@ -24,6 +24,16 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+        
+    App\Controller\Api\StatsController:
+        tags: ['controller.service_arguments']
+        public: true
+        arguments:
+            - '@App\Infrastructure\ApiRequest\ElasticStatsProvider'
+            
+    App\Infrastructure\ApiRequest\ElasticStatsProvider:
+        arguments:
+            - '@fos_elastica.client.default'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
