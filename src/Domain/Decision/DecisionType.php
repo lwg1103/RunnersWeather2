@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Decision;
+namespace App\Domain\Decision;
 
 use App\SerializableType;
 

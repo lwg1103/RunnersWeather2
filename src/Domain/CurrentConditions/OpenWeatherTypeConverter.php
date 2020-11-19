@@ -1,8 +1,8 @@
 <?php
 
-namespace App\CurrentConditions;
+namespace App\Domain\CurrentConditions;
 
-use App\Conditions\WeatherType;
+use App\Domain\Conditions\WeatherType;
 
 class OpenWeatherTypeConverter
 {

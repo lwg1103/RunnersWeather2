@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Conditions;
+namespace App\Domain\Conditions;
 
-use App\Decision\DecisionType;
+use App\Domain\Decision\DecisionType;
 
 class WeatherConditions
 {

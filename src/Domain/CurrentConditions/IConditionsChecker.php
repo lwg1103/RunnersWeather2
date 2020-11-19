@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CurrentConditions;
+namespace App\Domain\CurrentConditions;
 
 interface IConditionsChecker
 {

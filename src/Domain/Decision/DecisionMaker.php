@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Decision;
+namespace App\Domain\Decision;
 
-use App\Conditions\WeatherConditions;
-use App\Conditions\WeatherType;
+use App\Domain\Conditions\WeatherConditions;
+use App\Domain\Conditions\WeatherType;
 
 class DecisionMaker implements IDecisionMaker
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\CurrentConditions;
+namespace App\Domain\CurrentConditions;
 
-use App\Conditions\WeatherConditions;
+use App\Domain\Conditions\WeatherConditions;
 
 interface IConditionsProvider
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Conditions;
+namespace App\Domain\Conditions;
 
-use App\Conditions\WeatherConditions;
+use App\Domain\Conditions\WeatherConditions;
 
 class AverageWeatherConditionsCalculator
 {

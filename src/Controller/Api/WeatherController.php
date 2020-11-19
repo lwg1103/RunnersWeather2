@@ -5,12 +5,12 @@ namespace App\Controller\Api;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
-use App\CurrentConditions\IConditionsChecker;
+use App\Domain\CurrentConditions\IConditionsChecker;
 use App\HttpClient\IHttpClient;
-use App\Conditions\AverageWeatherConditionsCalculator;
-use App\Decision\IDecisionMaker;
-use App\CurrentConditions\AirlyConditionsProvider;
-use App\CurrentConditions\OpenWeatherConditionsProvider;
+use App\Domain\Conditions\AverageWeatherConditionsCalculator;
+use App\Domain\Decision\IDecisionMaker;
+use App\Domain\CurrentConditions\AirlyConditionsProvider;
+use App\Domain\CurrentConditions\OpenWeatherConditionsProvider;
 use App\Logger\IApiCallLogger;
 
 /**
