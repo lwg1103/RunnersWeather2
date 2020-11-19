@@ -41,6 +41,12 @@ class ApiRequestLog
      * @ORM\Column(type="datetime")
      */
     private $DateTime;
+    
+    /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $decisionType = 0;
 
     public function __construct(float $lat, float $long, int $user)
     {
@@ -75,14 +81,28 @@ class ApiRequestLog
         return $this->DateTime;
     }
 
-    public function setDateTime(\DateTime $DateTime): void
+    public function setDateTime(\DateTime $DateTime)
     {
         $this->DateTime = $DateTime;
+        
+        return $this;
     }
 
     public function getHour(): string
     {
         return $this->DateTime->format('H');
+    }
+    
+    public function getDecisionType(): int
+    {
+        return $this->decisionType;
+    }
+
+    public function setDecisionType(int $decisionType)
+    {
+        $this->decisionType = $decisionType;
+        
+        return $this;
     }
 
 }

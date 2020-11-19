@@ -4,14 +4,14 @@ namespace App\Controller\Api;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Response;
-use App\CurrentConditions\IConditionsChecker;
 use App\HttpClient\IHttpClient;
-use App\Conditions\AverageWeatherConditionsCalculator;
-use App\Decision\IDecisionMaker;
-use App\CurrentConditions\AirlyConditionsProvider;
-use App\CurrentConditions\OpenWeatherConditionsProvider;
-use App\Logger\IApiCallLogger;
+use App\Domain\CurrentConditions\IConditionsChecker;
+use App\Domain\Conditions\AverageWeatherConditionsCalculator;
+use App\Domain\Decision\IDecisionMaker;
+use App\Domain\CurrentConditions\AirlyConditionsProvider;
+use App\Domain\CurrentConditions\OpenWeatherConditionsProvider;
+use App\Infrastructure\Logger\IApiCallLogger;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/weather")
@@ -34,7 +34,7 @@ class WeatherController extends AbstractController
             IHttpClient $HttpClient,
             IApiCallLogger $Logger)
     {
-        $Logger->log($lat, $long);
+        $ApiCallLog = $Logger->log($lat, $long);
 
         $ConditionsChecker->registerConditionsProvider(
                 new AirlyConditionsProvider($HttpClient, $this->getParameter('api.airly'))
@@ -48,15 +48,10 @@ class WeatherController extends AbstractController
 
         $weather = $AverageWeatherConditionsCalculator->calculate($conditions);
         $weather->decision = $DecisionMaker->checkWeatherForRunning($weather);
+        
+        $Logger->logDecision($ApiCallLog, $weather->decision);
 
-        $response = new Response();
-
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-
-        $response->setContent($weather->toJSON());
-
-        return $response;
+        return new JsonResponse($weather);
     }
 
 }

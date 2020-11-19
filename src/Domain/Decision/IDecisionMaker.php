@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Decision;
+namespace App\Domain\Decision;
 
-use App\Conditions\WeatherConditions;
+use App\Domain\Conditions\WeatherConditions;
 
 interface IDecisionMaker
 {

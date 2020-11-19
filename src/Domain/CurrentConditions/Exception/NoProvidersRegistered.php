@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CurrentConditions\Exception;
+namespace App\Domain\CurrentConditions\Exception;
 
 class NoProvidersRegistered extends \Exception
 {

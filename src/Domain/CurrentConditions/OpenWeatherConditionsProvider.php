@@ -1,10 +1,10 @@
 <?php
 
-namespace App\CurrentConditions;
+namespace App\Domain\CurrentConditions;
 
-use App\Conditions\WeatherConditions;
+use App\Domain\Conditions\WeatherConditions;
 use App\HttpClient\IHttpClient;
-use App\Conditions\WeatherType;
+use App\Domain\Conditions\WeatherType;
 
 class OpenWeatherConditionsProvider implements IConditionsProvider
 {

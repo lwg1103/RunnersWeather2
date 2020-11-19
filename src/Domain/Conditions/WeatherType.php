@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Conditions;
+namespace App\Domain\Conditions;
 
 use App\SerializableType;
 

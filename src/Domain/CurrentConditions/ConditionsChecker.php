@@ -1,8 +1,8 @@
 <?php
 
-namespace App\CurrentConditions;
+namespace App\Domain\CurrentConditions;
 
-use App\CurrentConditions\Exception\NoProvidersRegistered;
+use App\Domain\CurrentConditions\Exception\NoProvidersRegistered;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class ConditionsChecker implements IConditionsChecker

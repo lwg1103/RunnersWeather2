@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Conditions;
+namespace App\Domain\Conditions;
 
-use App\Decision\DecisionType;
+use App\Domain\Decision\DecisionType;
 
 class WeatherConditions
 {
@@ -33,11 +33,6 @@ class WeatherConditions
         $this->decision = new DecisionType(0);
 
         $this->datetime = new \DateTime;
-    }
-
-    public function toJSON()
-    {
-        return json_encode($this);
     }
 
 }
