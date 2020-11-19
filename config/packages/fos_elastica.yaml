@@ -10,6 +10,7 @@ fos_elastica:
                 date_time: ~
                 hour:
                     type: integer
+                decision_type: ~
             persistence:
                 driver: orm
                 model: App\Entity\ApiRequest\ApiRequestLog
