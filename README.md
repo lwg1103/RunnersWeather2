@@ -1,3 +1,6 @@
+# 0.9.0
+new api endpoint /api/stats/api-request/group/time
+
 ### 0.8.2
 gather api stats in elasticsearch
 
