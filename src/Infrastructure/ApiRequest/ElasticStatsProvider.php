@@ -17,13 +17,23 @@ class ElasticStatsProvider implements IStatsProvider
     
     public function getCountByTime(): array
     {
+        return $this->aggregateBy('hour', 24);
+    }
+    
+    public function getCountByDecision(): array
+    {
+        return $this->aggregateBy('decision_type', 9);
+    }
+    
+    private function aggregateBy(string $fieldName, int $size): array
+    {
         $query = new \Elastica\Query();
-        $agg = new \Elastica\Aggregation\Terms('hours');
-        $agg->setField('hour');
-        $agg->setSize(24);
+        $agg = new \Elastica\Aggregation\Terms($fieldName);
+        $agg->setField($fieldName);
+        $agg->setSize($size);
         $query->addAggregation($agg);
         
-        $findings = $this->ElasticaClient->getIndex('api_request_log')->search($query)->getAggregation("hours");
+        $findings = $this->ElasticaClient->getIndex('api_request_log')->search($query)->getAggregation($fieldName);
         
         $results = [];
         foreach ($findings['buckets'] as $bucket) {
@@ -31,17 +41,6 @@ class ElasticStatsProvider implements IStatsProvider
         }
 
         return $results;
-    }
-    
-    public function getCountByDecision(): array
-    {
-        return [
-            'ok' => 15,
-            'low smog' => 2,
-            'high smog' => 2,
-            'rain' => 4,
-            'too hot' => 0
-        ]; 
     }
 
 }
