@@ -2,17 +2,14 @@ fos_elastica:
     clients:
         default: { host: '%env(resolve:es_host)%', port: '%env(resolve:es_port)%' }
     indexes:
-        api_request:
-            use_alias: true
-            types:
-                api_request_log:
-                    properties:
-                        longitude: ~
-                        latitude: ~
-                        user: ~
-                        date_time: ~
-                        hour:
-                            type: integer
-                    persistence:
-                        driver: orm
-                        model: App\Entity\ApiRequest\ApiRequestLog
+        api_request_log:
+            properties:
+                longitude: ~
+                latitude: ~
+                user: ~
+                date_time: ~
+                hour:
+                    type: integer
+            persistence:
+                driver: orm
+                model: App\Entity\ApiRequest\ApiRequestLog

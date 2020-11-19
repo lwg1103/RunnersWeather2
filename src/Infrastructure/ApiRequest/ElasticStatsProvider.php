@@ -23,7 +23,7 @@ class ElasticStatsProvider implements IStatsProvider
         $agg->setSize(24);
         $query->addAggregation($agg);
         
-        $findings = $this->ElasticaClient->getIndex('api_request')->search($query)->getAggregation("hours");
+        $findings = $this->ElasticaClient->getIndex('api_request_log')->search($query)->getAggregation("hours");
         
         $results = [];
         foreach ($findings['buckets'] as $bucket) {

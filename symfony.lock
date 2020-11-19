@@ -99,6 +99,12 @@
     "elasticsearch/elasticsearch": {
         "version": "v6.7.2"
     },
+    "ezimuel/guzzlestreams": {
+        "version": "3.0.1"
+    },
+    "ezimuel/ringphp": {
+        "version": "1.1.2"
+    },
     "friendsofsymfony/elastica-bundle": {
         "version": "5.0",
         "recipe": {
@@ -107,12 +113,6 @@
             "version": "5.0",
             "ref": "46c9cd2c1e07f0fcfd97e96f12b03b2e0845c4cd"
         }
-    },
-    "guzzlehttp/ringphp": {
-        "version": "1.1.1"
-    },
-    "guzzlehttp/streams": {
-        "version": "3.0.0"
     },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"

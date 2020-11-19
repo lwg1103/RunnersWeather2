@@ -36,7 +36,7 @@ services:
   # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
   elasticsearch:
     container_name: sb-elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.3 # 6.8.4 out
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
     ports:
       - "9209:9200"
     environment:
