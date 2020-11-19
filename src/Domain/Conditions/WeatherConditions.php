@@ -35,9 +35,4 @@ class WeatherConditions
         $this->datetime = new \DateTime;
     }
 
-    public function toJSON()
-    {
-        return json_encode($this);
-    }
-
 }
