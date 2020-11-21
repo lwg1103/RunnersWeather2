@@ -1,3 +1,6 @@
+### 0.9.1
+fixed CORS problem
+
 # 0.9.0
 new api endpoint /api/stats/api-request/group/time
 
