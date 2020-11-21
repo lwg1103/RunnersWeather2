@@ -1,9 +1,9 @@
 controllers:
-    resource: ../../src/Controller/DefaultController.php
+    resource: ../../src/Application/Controller/DefaultController.php
     type: annotation
     
 security_controllers:
-    resource: ../../src/Controller/SecurityController.php
+    resource: ../../src/Application/Controller/SecurityController.php
     type: annotation
 
 kernel:
@@ -11,7 +11,7 @@ kernel:
     type: annotation
     
 api_controllers:
-    resource: '../../src/Controller/Api'
+    resource: '../../src/Application/Controller/Api'
     type: annotation
     prefix: '/api'
     name_prefix: 'api_'

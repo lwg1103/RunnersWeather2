@@ -21,11 +21,11 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller'
+    App\Application\Controller\:
+        resource: '../src/Application/Controller'
         tags: ['controller.service_arguments']
         
-    App\Controller\Api\StatsController:
+    App\Application\Controller\Api\StatsController:
         tags: ['controller.service_arguments']
         public: true
         arguments:

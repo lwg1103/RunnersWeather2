@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Application\Controller\Api;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,7 +51,17 @@ class WeatherController extends AbstractController
         
         $Logger->logDecision($ApiCallLog, $weather->decision);
 
-        return new JsonResponse($weather);
+        return $this->createJsonResponse($weather);
+    }
+    
+    private function createJsonResponse($content): JsonResponse
+    {
+        $response = new JsonResponse($content);
+        
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        
+        return $response;
     }
 
 }
