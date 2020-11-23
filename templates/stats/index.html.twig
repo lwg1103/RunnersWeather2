@@ -1,9 +1,72 @@
 {% extends 'base.html.twig' %}
-    
- {% block title %} RunnersWeather2 API {% endblock %}
-    
- {% block body %}
-     <p><a href="{{ path('api_requests_by_time') }}">Requests by time</a></p>
-     <p><a href="{{ path('api_requests_by_decision') }}">Requests by decision</a></p>
-    
- {% endblock %}
+
+{% block title %} RunnersWeather2 API {% endblock %}
+
+{% block body %}
+    <p><a href="{{ path('api_requests_by_time') }}">Requests by time</a></p>
+    <p><a href="{{ path('api_requests_by_decision') }}">Requests by decision</a></p>
+    <div style="width: 100vw">
+        <div style="width: 50vw; display: inline-block; float: left">
+            <h1>Requests by hour</h1>
+            <canvas id="myChart"></canvas>
+        </div>
+        <div style="width: 50vw; display: inline-block">
+            <h1>Requests by decision</h1>
+            <canvas id="myChart2"></canvas>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: [0, 1, 2, 3, 4, 5, 6, 7],
+                datasets: [{
+                        label: 'My First dataset',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: [0, 10, 5, 2, 20, 30, 45]
+                    }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true
+            }
+        });
+
+
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+        var chart = new Chart(ctx2, {
+            // The type of chart we want to create
+            type: 'pie',
+
+            // The data for our dataset
+            data: {
+                labels: [0, 1, 2, 3, 4],
+                datasets: [{
+                        label: 'My First dataset',
+                        backgroundColor: [
+                            'red',
+                            'green',
+                            'blue',
+                            'orange',
+                            'black',
+                        ],
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: [10, 10, 5, 2, 20]
+                    }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+
+{% endblock %}
