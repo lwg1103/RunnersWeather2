@@ -12,7 +12,7 @@
         </div>
         <div style="width: 50vw; display: inline-block">
             <h1>Requests by decision</h1>
-            <canvas id="myChart2"></canvas>
+            <canvas id="piechart"></canvas>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -39,18 +39,53 @@
             }
         });
         
+        $.ajax({
+            url : "/api/stats/api-request/group/decision",
+
+            success : function(response) {
+                var labels = [],
+                    data = [];
+                
+                for (var i in response) {
+                    labels.push(i);
+                    data.push(response[i]);
+                }
+                
+                setDataForPieChart(labels, data);
+            }
+        });
+        
         function setDataForHistogram(histogramLabels, histogramData) {            
-            var ctx = document.getElementById('histogram').getContext('2d');
+            drawChart(histogramLabels, histogramData, 'histogram', 'bar');
+        }
+
+        function setDataForPieChart(chartLabels, chartData) {                        
+            drawChart(chartLabels, chartData, 'piechart', 'pie');
+        }
+        
+        function drawChart(chartLabels, chartData, elementId, chartType) {
+            var color = 'red';
+            
+            if (chartType === 'pie') {
+                color = [
+                    'red',
+                    'green',
+                    'blue',
+                    'orange',
+                    'black',
+                ];
+            }
+            
+            var ctx = document.getElementById(elementId).getContext('2d');
             new Chart(ctx, {
-                type: 'bar',
+                type: chartType,
 
                 data: {
-                    labels: histogramLabels,
+                    labels: chartLabels,
                     datasets: [{
-                            label: 'Requests',
-                            backgroundColor: 'rgb(255, 99, 132)',
-                            borderColor: 'rgb(255, 99, 132)',
-                            data: histogramData
+                            label: 'Count',
+                            backgroundColor: color,
+                            data: chartData
                         }]
                 },
 
@@ -59,34 +94,6 @@
                 }
             });
         }
-
-        var ctx2 = document.getElementById('myChart2').getContext('2d');
-        var chart = new Chart(ctx2, {
-            // The type of chart we want to create
-            type: 'pie',
-
-            // The data for our dataset
-            data: {
-                labels: [0, 1, 2, 3, 4],
-                datasets: [{
-                        label: 'My First dataset',
-                        backgroundColor: [
-                            'red',
-                            'green',
-                            'blue',
-                            'orange',
-                            'black',
-                        ],
-                        borderColor: 'rgb(255, 99, 132)',
-                        data: [10, 10, 5, 2, 20]
-                    }]
-            },
-
-            // Configuration options go here
-            options: {
-                responsive: true
-            }
-        });
     </script>
 
 {% endblock %}
