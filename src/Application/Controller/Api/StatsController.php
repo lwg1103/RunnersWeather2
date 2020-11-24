@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Infrastructure\ApiRequest\IStatsProvider;
+use App\Domain\Decision\DecisionType;
 
 /**
  * @Route("/stats")
@@ -33,6 +34,14 @@ class StatsController extends AbstractController
      */
     public function getApiRequestByDecision()
     {
-        return new JsonResponse($this->StatsProvider->getCountByDecision());
+        $aggregation = $this->StatsProvider->getCountByDecision();
+        
+        $result = [];
+        foreach ($aggregation as $decisionId => $count) {
+            $decisionName = (string)(new DecisionType($decisionId));
+            $result[$decisionName] = $count;
+        }
+        
+        return new JsonResponse($result);
     }
 }

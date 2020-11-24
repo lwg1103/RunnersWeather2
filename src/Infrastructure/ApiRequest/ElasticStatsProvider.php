@@ -24,7 +24,7 @@ class ElasticStatsProvider implements IStatsProvider
     {
         return $this->aggregateBy('decision_type', 9);
     }
-    
+        
     private function aggregateBy(string $fieldName, int $size): array
     {
         $query = new \Elastica\Query();
