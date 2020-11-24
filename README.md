@@ -1,3 +1,6 @@
+# 0.10.0
+histogram with requests by time
+
 ### 0.9.1
 fixed CORS problem
 
