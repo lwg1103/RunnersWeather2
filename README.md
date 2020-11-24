@@ -1,20 +1,16 @@
+# 0.11.0
+piechart with requests by decision
+
 # 0.10.0
 histogram with requests by time
 
-### 0.9.1
+# 0.9
+new api endpoint /api/stats/api-request/group/time
 fixed CORS problem
 
-# 0.9.0
-new api endpoint /api/stats/api-request/group/time
-
-### 0.8.2
-gather api stats in elasticsearch
-
-### 0.8.1
+# 0.8
 divided front and backend application
-
-# 0.8.0
-morning notification - abandoned
+gather api stats in elasticsearch
 
 # 0.7 
 initial map and location provider (working on desktop)
