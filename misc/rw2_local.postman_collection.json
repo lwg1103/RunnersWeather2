@@ -1,0 +1,191 @@
+{
+	"info": {
+		"_postman_id": "2841b122-0d96-419a-97d0-525ba148fca2",
+		"name": "rw2 local",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "weather real",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e9d6feec-aade-482b-b497-c91f60511fc5",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.recommendation).to.eql(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "key_5e52d8472a72c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/api/weather/51.08613/17.05629",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"weather",
+						"51.08613",
+						"17.05629"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "histogram data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6921655d-351f-4e47-af75-35f1d37cbec6",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.recommendation).to.eql(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"type": "text",
+						"value": "key_5e52d8472a72c"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/api/stats/api-request/group/time",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"stats",
+						"api-request",
+						"group",
+						"time"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "decision data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "feff7357-7367-43a1-8404-d20f0506f979",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Your test name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.recommendation).to.eql(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"type": "text",
+						"value": "key_5e52d8472a72c"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/api/stats/api-request/group/decision",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"stats",
+						"api-request",
+						"group",
+						"decision"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fb auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "example@com.pl",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "xxx",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/auth/facebook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"auth",
+						"facebook"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

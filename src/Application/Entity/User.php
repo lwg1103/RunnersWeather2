@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Entity;
+namespace App\Application\Entity;
 
-use App\Repository\UserRepository;
+use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Application\Entity\UserApiAccess;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -17,22 +18,30 @@ class User implements UserInterface
      * @ORM\Column(type="integer")
      */
     private $id;
-
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
-
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
-
+    private $roles     = [];
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $password;
+    /**
+     * @var UserApiAccess
+     * @ORM\OneToOne(targetEntity="UserApiAccess", cascade={"all"})
+     * @ORM\JoinColumn(name="api_access_id", referencedColumnName="id")
+     */
+    private $apiAccess = null;
+
+    public function __construct(string $email)
+    {
+        $this->email = $email;
+    }
 
     public function getId(): ?int
     {
@@ -66,7 +75,7 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $roles   = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
@@ -111,4 +120,20 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+    public function hasApiAccess(): bool
+    {
+        return !is_null($this->apiAccess);
+    }
+
+    public function grantApiAccess()
+    {
+        $this->apiAccess = new UserApiAccess($this->email);
+    }
+
+    public function getApiToken(): string
+    {
+        return $this->apiAccess->getApiKey();
+    }
+
 }

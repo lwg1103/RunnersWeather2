@@ -1,3 +1,6 @@
+# 0.12.0
+fb token auth endpoint
+
 # 0.11.0
 piechart with requests by decision
 
@@ -42,6 +45,9 @@ simple recommendation screen
 initial version
 
 # info
+
+### mysql & elastic
+docker-compose -f docker-compose.yaml up -d
 
 ### deployment
 ansible-playbook -i etc/hosts etc/deploy/deploy.yml

@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Logger;
 
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\ApiRequest\ApiRequestLog;
+use App\Application\Entity\ApiRequestLog;
 use App\Domain\Decision\DecisionType;
 
 class DBApiCallLogger implements IApiCallLogger
