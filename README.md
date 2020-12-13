@@ -43,6 +43,9 @@ initial version
 
 # info
 
+### mysql & elastic
+docker-compose -f docker-compose.yaml up -d
+
 ### deployment
 ansible-playbook -i etc/hosts etc/deploy/deploy.yml
 
