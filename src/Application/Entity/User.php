@@ -126,9 +126,9 @@ class User implements UserInterface
         return !is_null($this->apiAccess);
     }
 
-    public function grantApiAccess(string $seed, string $salt)
+    public function grantApiAccess()
     {
-        $this->apiAccess = new UserApiAccess($this->email, $seed, $salt);
+        $this->apiAccess = new UserApiAccess($this->email);
     }
 
     public function getApiToken(): string

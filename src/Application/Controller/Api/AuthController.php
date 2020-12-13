@@ -34,25 +34,33 @@ class AuthController extends AbstractController
         $email = $request->request->get('email');
         $token = $request->request->get('token');
 
-        if ($this->TokenVerificator->verify($token, $email))
+        if (!$this->TokenVerificator->verify($token, $email))
         {
-            /** @var $user User */
-            $user = $this->EntityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+            return new JsonResponse(['verified' => false]);
+        }
+        
+        $user = $this->getUserByEmail($email);
 
-            if (is_null($user))
-            {
-                $user = new User($email);
-                $this->EntityManager->persist($user);
-            }
-
-            $user->grantApiAccess('abc', 'salt');
-
-            $this->EntityManager->flush();
-
-            return new JsonResponse(['verified' => true, 'token' => $user->getApiToken()]);
+        if (!$user->hasApiAccess()) {
+            $user->grantApiAccess();
         }
 
-        return new JsonResponse(['verified' => false]);
+        $this->EntityManager->flush();
+
+        return new JsonResponse(['verified' => true, 'token' => $user->getApiToken()]);
+    }
+    
+    private function getUserByEmail(string $email): User
+    {
+        $user = $this->EntityManager->getRepository(User::class)->findOneByEmail($email);
+        
+        if (is_null($user))
+        {
+            $user = new User($email);
+            $this->EntityManager->persist($user);
+        }
+        
+        return $user;
     }
 
 }

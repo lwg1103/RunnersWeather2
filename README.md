@@ -1,3 +1,6 @@
+# 0.12.0
+fb token auth endpoint
+
 # 0.11.0
 piechart with requests by decision
 

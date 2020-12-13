@@ -26,9 +26,9 @@ class UserApiAccess
      */
     private $active = true;
     
-    public function __construct(string $email, string $seed, string $salt)
+    public function __construct(string $email)
     {
-        $this->apiKey = md5($email.$seed.$salt);
+        $this->apiKey = md5($email. random_bytes(100));
     }
     
     public function getApiKey(): string
