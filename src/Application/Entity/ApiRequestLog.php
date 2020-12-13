@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\ApiRequest;
+namespace App\Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

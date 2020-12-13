@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Logger;
 
-use App\Entity\ApiRequest\ApiRequestLog;
+use App\Application\Entity\ApiRequestLog;
 use App\Domain\Decision\DecisionType;
 
 interface IApiCallLogger 
