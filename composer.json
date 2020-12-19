@@ -11,6 +11,7 @@
         "doctrine/orm": "^2.7",
         "facebook/graph-sdk": "^5.7",
         "friendsofsymfony/elastica-bundle": "^6.0",
+        "nelmio/cors-bundle": "^2.1",
         "predis/predis": "^1.1",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.1.*",
