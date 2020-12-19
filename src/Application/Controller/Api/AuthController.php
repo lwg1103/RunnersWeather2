@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Application\Service\IAccessTokenVerificator;
 use App\Application\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
+use App\Application\Service\AuthTokenData;
 
 /**
  * @Route("/auth")
@@ -31,15 +33,14 @@ class AuthController extends AbstractController
      */
     public function authFacebook(Request $request)
     {
-        $email = $request->request->get('email');
-        $token = $request->request->get('token');
+        $tokenData = $this->validateParameters($request);
 
-        if (!$this->TokenVerificator->verify($token, $email))
+        if (!$this->TokenVerificator->verify($tokenData))
         {
-            return new JsonResponse(['verified' => false]);
+            return $this->createJsonResponse(['verified' => false]);
         }
         
-        $user = $this->getUserByEmail($email);
+        $user = $this->getUserByEmail($tokenData->email);
 
         if (!$user->hasApiAccess()) {
             $user->grantApiAccess();
@@ -47,7 +48,18 @@ class AuthController extends AbstractController
 
         $this->EntityManager->flush();
 
-        return new JsonResponse(['verified' => true, 'token' => $user->getApiToken()]);
+        return $this->createJsonResponse(['verified' => true, 'token' => $user->getApiToken()]);
+    }
+    
+    private function validateParameters(Request $request): AuthTokenData
+    {
+        $parameters = json_decode($request->getContent(), true);
+        
+        if (isset($parameters['token']) && isset($parameters['email'])) {
+            return new AuthTokenData($parameters['email'], $parameters['token']);
+        } else {
+            throw new InvalidParameterException();
+        }
     }
     
     private function getUserByEmail(string $email): User
@@ -61,6 +73,16 @@ class AuthController extends AbstractController
         }
         
         return $user;
+    }
+    
+    private function createJsonResponse($content): JsonResponse
+    {
+        $response = new JsonResponse($content);
+        
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        
+        return $response;
     }
 
 }

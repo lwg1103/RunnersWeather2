@@ -1,3 +1,7 @@
+## 0.12.1
+cors fix on error page
+fb auth improvements
+
 # 0.12.0
 fb token auth endpoint
 
