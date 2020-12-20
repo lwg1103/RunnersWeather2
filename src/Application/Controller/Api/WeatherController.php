@@ -12,6 +12,8 @@ use App\Domain\CurrentConditions\AirlyConditionsProvider;
 use App\Domain\CurrentConditions\OpenWeatherConditionsProvider;
 use App\Infrastructure\Logger\IApiCallLogger;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/weather")
@@ -19,49 +21,109 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class WeatherController extends AbstractController
 {
 
+    /** @var IConditionsChecker */
+    private $ConditionsChecker;
+
+    /** @var IDecisionMaker */
+    private $DecisionMaker;
+
+    /** @var AverageWeatherConditionsCalculator */
+    private $AverageWeatherConditionsCalculator;
+
+    /** @var IHttpClient */
+    private $HttpClient;
+
+    /** @var IApiCallLogger */
+    private $Logger;
+
+    public function __construct(IConditionsChecker $ConditionsChecker, IDecisionMaker $DecisionMaker, AverageWeatherConditionsCalculator $AverageWeatherConditionsCalculator, IHttpClient $HttpClient, IApiCallLogger $Logger)
+    {
+        $this->ConditionsChecker = $ConditionsChecker;
+        $this->DecisionMaker = $DecisionMaker;
+        $this->AverageWeatherConditionsCalculator = $AverageWeatherConditionsCalculator;
+        $this->HttpClient = $HttpClient;
+        $this->Logger = $Logger;
+    }
+
     /**
      * @Route("/{lat}/{long}", name="get_weather")
      * @param float $lat
      * @param float $long
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getWeather(
-            float $lat,
-            float $long,
-            IConditionsChecker $ConditionsChecker,
-            IDecisionMaker $DecisionMaker,
-            AverageWeatherConditionsCalculator $AverageWeatherConditionsCalculator,
-            IHttpClient $HttpClient,
-            IApiCallLogger $Logger)
+    public function getWeather(float $lat, float $long)
     {
-        $ApiCallLog = $Logger->log($lat, $long);
+        $ApiCallLog = $this->Logger->log($lat, $long);
 
-        $ConditionsChecker->registerConditionsProvider(
-                new AirlyConditionsProvider($HttpClient, $this->getParameter('api.airly'))
+        $this->ConditionsChecker->registerConditionsProvider(
+                new AirlyConditionsProvider($this->HttpClient, $this->getParameter('api.airly'))
         );
 
-        $ConditionsChecker->registerConditionsProvider(
-                new OpenWeatherConditionsProvider($HttpClient, $this->getParameter('api.openweather'))
+        $this->ConditionsChecker->registerConditionsProvider(
+                new OpenWeatherConditionsProvider($this->HttpClient, $this->getParameter('api.openweather'))
         );
 
-        $conditions = $ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
+        $conditions = $this->ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
 
-        $weather = $AverageWeatherConditionsCalculator->calculate($conditions);
-        $weather->decision = $DecisionMaker->checkWeatherForRunning($weather);
-        
-        $Logger->logDecision($ApiCallLog, $weather->decision);
+        $weather = $this->AverageWeatherConditionsCalculator->calculate($conditions);
+        $weather->decision = $this->DecisionMaker->checkWeatherForRunning($weather);
+
+        $this->Logger->logDecision($ApiCallLog, $weather->decision);
 
         return $this->createJsonResponse($weather);
     }
-    
+
+    /**
+     * @Route("/", name="get_weather_2")
+     * @param float $lat
+     * @param float $long
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getWeatherV2(Request $request)
+    {
+        list($token, $lat, $long) = $this->validateParameters($request);
+
+        $ApiCallLog = $this->Logger->log($lat, $long);
+
+        $this->ConditionsChecker->registerConditionsProvider(
+                new AirlyConditionsProvider($this->HttpClient, $this->getParameter('api.airly'))
+        );
+
+        $this->ConditionsChecker->registerConditionsProvider(
+                new OpenWeatherConditionsProvider($this->HttpClient, $this->getParameter('api.openweather'))
+        );
+
+        $conditions = $this->ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
+
+        $weather = $this->AverageWeatherConditionsCalculator->calculate($conditions);
+        $weather->decision = $this->DecisionMaker->checkWeatherForRunning($weather);
+
+        $this->Logger->logDecision($ApiCallLog, $weather->decision);
+
+        return $this->createJsonResponse($weather);
+    }
+
     private function createJsonResponse($content): JsonResponse
     {
         $response = new JsonResponse($content);
-        
+
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
-        
+
         return $response;
+    }
+
+    private function validateParameters(Request $request): array
+    {
+        $parameters = json_decode($request->getContent(), true);
+
+        if (isset($parameters['token']) && isset($parameters['lat']) && isset($parameters['long']))
+        {
+            return [$parameters['token'], $parameters['lat'], $parameters['long']];
+        } else
+        {
+            throw new InvalidParameterException();
+        }
     }
 
 }
