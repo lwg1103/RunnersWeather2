@@ -14,6 +14,9 @@ use App\Infrastructure\Logger\IApiCallLogger;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\HttpFoundation\Request;
+use App\Application\Entity\User;
+use App\Infrastructure\Repository\UserRepository;
+use App\Application\Controller\InvalidApiTokenException;
 
 /**
  * @Route("/weather")
@@ -36,13 +39,24 @@ class WeatherController extends AbstractController
     /** @var IApiCallLogger */
     private $Logger;
 
-    public function __construct(IConditionsChecker $ConditionsChecker, IDecisionMaker $DecisionMaker, AverageWeatherConditionsCalculator $AverageWeatherConditionsCalculator, IHttpClient $HttpClient, IApiCallLogger $Logger)
+    /** @var UserRepository */
+    private $UserRepository;
+
+    public function __construct(
+            IConditionsChecker $ConditionsChecker,
+            IDecisionMaker $DecisionMaker,
+            AverageWeatherConditionsCalculator $AverageWeatherConditionsCalculator,
+            IHttpClient $HttpClient,
+            IApiCallLogger $Logger,
+            UserRepository $UserRepository
+    )
     {
         $this->ConditionsChecker = $ConditionsChecker;
         $this->DecisionMaker = $DecisionMaker;
         $this->AverageWeatherConditionsCalculator = $AverageWeatherConditionsCalculator;
         $this->HttpClient = $HttpClient;
         $this->Logger = $Logger;
+        $this->UserRepository = $UserRepository;
     }
 
     /**
@@ -82,6 +96,7 @@ class WeatherController extends AbstractController
     public function getWeatherV2(Request $request)
     {
         list($token, $lat, $long) = $this->validateParameters($request);
+        $User = $this->validateApiToken($token);
 
         $ApiCallLog = $this->Logger->log($lat, $long);
 
@@ -124,6 +139,17 @@ class WeatherController extends AbstractController
         {
             throw new InvalidParameterException();
         }
+    }
+    
+    private function validateApiToken(string $token): User
+    {
+        $User = $this->UserRepository->findByApiToken($token);
+        
+        if (is_null($User)) {
+            throw new InvalidApiTokenException();
+        }
+        
+        return $User;
     }
 
 }
