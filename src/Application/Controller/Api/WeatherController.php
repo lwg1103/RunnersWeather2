@@ -98,7 +98,7 @@ class WeatherController extends AbstractController
         list($token, $lat, $long) = $this->validateParameters($request);
         $User = $this->validateApiToken($token);
 
-        $ApiCallLog = $this->Logger->log($lat, $long);
+        $ApiCallLog = $this->Logger->log($lat, $long, $User);
 
         $this->ConditionsChecker->registerConditionsProvider(
                 new AirlyConditionsProvider($this->HttpClient, $this->getParameter('api.airly'))
