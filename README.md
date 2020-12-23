@@ -1,3 +1,6 @@
+## 0.12.2
+saves user with api request log
+
 ## 0.12.1
 cors fix on error page
 fb auth improvements

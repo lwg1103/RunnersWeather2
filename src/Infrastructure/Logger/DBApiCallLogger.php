@@ -5,6 +5,7 @@ namespace App\Infrastructure\Logger;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Application\Entity\ApiRequestLog;
 use App\Domain\Decision\DecisionType;
+use App\Application\Entity\User;
 
 class DBApiCallLogger implements IApiCallLogger
 {
@@ -16,9 +17,9 @@ class DBApiCallLogger implements IApiCallLogger
         $this->EntityManager = $EntityManager;
     }
 
-    public function log(float $lat, float $long): ApiRequestLog
+    public function log(float $lat, float $long, User $user): ApiRequestLog
     {
-        $ApiLog = new ApiRequestLog($lat, $long, 0);
+        $ApiLog = new ApiRequestLog($lat, $long, $user);
         $this->EntityManager->persist($ApiLog);
         $this->EntityManager->flush();   
         

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Tests\Logger;
+namespace App\Tests\Infrastructure\Logger;
 
 use PHPUnit\Framework\TestCase;
-use App\Logger\DBApiCallLogger;
+use App\Infrastructure\Logger\DBApiCallLogger;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\ApiRequest\ApiRequestLog;
+use App\Application\Entity\ApiRequestLog;
+use App\Application\Entity\User;
 
 class DBApiCallLoggerTest extends TestCase {
 
@@ -17,6 +18,9 @@ class DBApiCallLoggerTest extends TestCase {
 
     /** @var EntityManagerInterface */
     private $EntityManagerMock;
+    
+    /** @var User */
+    private $UserMock;
 
     public function testPersistAndFlushLog() {
         $this->thenApiLogIsSaved()
@@ -29,12 +33,16 @@ class DBApiCallLoggerTest extends TestCase {
                 ->getMock();
 
         $this->DBApiCallLogger = new DBApiCallLogger($this->EntityManagerMock);
+        
+        $this->UserMock = $this->getMockBuilder(User::class)
+                ->disableOriginalConstructor()
+                ->getMock();
 
         parent::setUp();
     }
 
     private function thenApiLogIsSaved() {
-        $ApiLog = new ApiRequestLog(self::LAT, self::LONG, 0);
+        $ApiLog = new ApiRequestLog(self::LAT, self::LONG, $this->UserMock);
         
         $this->EntityManagerMock->expects($this->once())
                 ->method('persist')
@@ -47,7 +55,7 @@ class DBApiCallLoggerTest extends TestCase {
     }
 
     private function whenLogRequestForCoordinates() {
-        $this->DBApiCallLogger->log(self::LAT, self::LONG);
+        $this->DBApiCallLogger->log(self::LAT, self::LONG, $this->UserMock);
 
         return $this;
     }

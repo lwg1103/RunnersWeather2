@@ -3,6 +3,7 @@
 namespace App\Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Application\Entity\User;
 
 /**
  * @ORM\Entity 
@@ -31,8 +32,9 @@ class ApiRequestLog
     private $latitude;
 
     /**
-     * @var int
-     * @ORM\Column(type="integer")
+     * @var User
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
 
@@ -48,7 +50,7 @@ class ApiRequestLog
      */
     private $decisionType = 0;
 
-    public function __construct(float $lat, float $long, int $user)
+    public function __construct(float $lat, float $long, User $user)
     {
         $this->longitude = $long;
         $this->latitude = $lat;
@@ -71,7 +73,7 @@ class ApiRequestLog
         return $this->latitude;
     }
 
-    public function getUser(): int
+    public function getUser(): User
     {
         return $this->user;
     }

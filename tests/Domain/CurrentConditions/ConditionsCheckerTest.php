@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Tests\CurrentConditions;
+namespace App\Tests\Domain\CurrentConditions;
 
 use PHPUnit\Framework\TestCase;
-use App\CurrentConditions\ConditionsChecker;
-use App\CurrentConditions\Exception\NoProvidersRegistered;
-use App\Conditions\WeatherConditions;
-use App\CurrentConditions\IConditionsProvider;
+use App\Domain\CurrentConditions\ConditionsChecker;
+use App\Domain\CurrentConditions\Exception\NoProvidersRegistered;
+use App\Domain\Conditions\WeatherConditions;
+use App\Domain\CurrentConditions\IConditionsProvider;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 

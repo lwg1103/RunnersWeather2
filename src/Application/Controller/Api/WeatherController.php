@@ -14,6 +14,9 @@ use App\Infrastructure\Logger\IApiCallLogger;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\HttpFoundation\Request;
+use App\Application\Entity\User;
+use App\Infrastructure\Repository\UserRepository;
+use App\Application\Controller\InvalidApiTokenException;
 
 /**
  * @Route("/weather")
@@ -36,54 +39,38 @@ class WeatherController extends AbstractController
     /** @var IApiCallLogger */
     private $Logger;
 
-    public function __construct(IConditionsChecker $ConditionsChecker, IDecisionMaker $DecisionMaker, AverageWeatherConditionsCalculator $AverageWeatherConditionsCalculator, IHttpClient $HttpClient, IApiCallLogger $Logger)
+    /** @var UserRepository */
+    private $UserRepository;
+
+    public function __construct(
+            IConditionsChecker $ConditionsChecker,
+            IDecisionMaker $DecisionMaker,
+            AverageWeatherConditionsCalculator $AverageWeatherConditionsCalculator,
+            IHttpClient $HttpClient,
+            IApiCallLogger $Logger,
+            UserRepository $UserRepository
+    )
     {
         $this->ConditionsChecker = $ConditionsChecker;
         $this->DecisionMaker = $DecisionMaker;
         $this->AverageWeatherConditionsCalculator = $AverageWeatherConditionsCalculator;
         $this->HttpClient = $HttpClient;
         $this->Logger = $Logger;
+        $this->UserRepository = $UserRepository;
     }
 
     /**
-     * @Route("/{lat}/{long}", name="get_weather")
+     * @Route("/", name="get_weather")
      * @param float $lat
      * @param float $long
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getWeather(float $lat, float $long)
-    {
-        $ApiCallLog = $this->Logger->log($lat, $long);
-
-        $this->ConditionsChecker->registerConditionsProvider(
-                new AirlyConditionsProvider($this->HttpClient, $this->getParameter('api.airly'))
-        );
-
-        $this->ConditionsChecker->registerConditionsProvider(
-                new OpenWeatherConditionsProvider($this->HttpClient, $this->getParameter('api.openweather'))
-        );
-
-        $conditions = $this->ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
-
-        $weather = $this->AverageWeatherConditionsCalculator->calculate($conditions);
-        $weather->decision = $this->DecisionMaker->checkWeatherForRunning($weather);
-
-        $this->Logger->logDecision($ApiCallLog, $weather->decision);
-
-        return $this->createJsonResponse($weather);
-    }
-
-    /**
-     * @Route("/", name="get_weather_2")
-     * @param float $lat
-     * @param float $long
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function getWeatherV2(Request $request)
+    public function getWeather(Request $request)
     {
         list($token, $lat, $long) = $this->validateParameters($request);
+        $User = $this->validateApiToken($token);
 
-        $ApiCallLog = $this->Logger->log($lat, $long);
+        $ApiCallLog = $this->Logger->log($lat, $long, $User);
 
         $this->ConditionsChecker->registerConditionsProvider(
                 new AirlyConditionsProvider($this->HttpClient, $this->getParameter('api.airly'))
@@ -124,6 +111,17 @@ class WeatherController extends AbstractController
         {
             throw new InvalidParameterException();
         }
+    }
+    
+    private function validateApiToken(string $token): User
+    {
+        $User = $this->UserRepository->findByApiToken($token);
+        
+        if (is_null($User)) {
+            throw new InvalidApiTokenException();
+        }
+        
+        return $User;
     }
 
 }
