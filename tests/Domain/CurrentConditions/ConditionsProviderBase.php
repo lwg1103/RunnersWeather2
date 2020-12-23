@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Tests\CurrentConditions;
+namespace App\Tests\Domain\CurrentConditions;
 
 use PHPUnit\Framework\TestCase;
-use App\Conditions\WeatherConditions;
+use App\Domain\Conditions\WeatherConditions;
 use App\HttpClient\IHttpClient;
-use App\CurrentConditions\IConditionsProvider;
+use App\Domain\CurrentConditions\IConditionsProvider;
 
 abstract class ConditionsProviderBase extends TestCase
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Tests\Logger;
+namespace App\Tests\Infrastructure\Logger;
 
 use PHPUnit\Framework\TestCase;
-use App\Logger\DBApiCallLogger;
+use App\Infrastructure\Logger\DBApiCallLogger;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\ApiRequest\ApiRequestLog;
+use App\Application\Entity\ApiRequestLog;
 
 class DBApiCallLoggerTest extends TestCase {
 

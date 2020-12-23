@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Tests\Decision;
+namespace App\Tests\Domain\Decision;
 
 use PHPUnit\Framework\TestCase;
-use App\Decision\DecisionMaker;
-use App\Conditions\WeatherType;
-use App\Conditions\WeatherConditions;
-use App\Decision\DecisionType;
+use App\Domain\Decision\DecisionMaker;
+use App\Domain\Conditions\WeatherType;
+use App\Domain\Conditions\WeatherConditions;
+use App\Domain\Decision\DecisionType;
 
 class DecisionMakerTest extends TestCase
 {

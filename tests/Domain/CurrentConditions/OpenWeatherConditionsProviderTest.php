@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Tests\CurrentConditions;
+namespace App\Tests\Domain\CurrentConditions;
 
-use App\CurrentConditions\OpenWeatherConditionsProvider;
+use App\Domain\CurrentConditions\OpenWeatherConditionsProvider;
 use App\HttpClient\IHttpClient;
-use App\Conditions\WeatherConditions;
-use App\Conditions\WeatherType;
-use App\CurrentConditions\IConditionsProvider;
+use App\Domain\Conditions\WeatherConditions;
+use App\Domain\Conditions\WeatherType;
+use App\Domain\CurrentConditions\IConditionsProvider;
 
 class OpenWeatherConditionsProviderTest extends ConditionsProviderBase
 {

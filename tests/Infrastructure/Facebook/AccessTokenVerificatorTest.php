@@ -8,6 +8,7 @@ use Facebook\Facebook;
 use PHPUnit\Framework\MockObject\MockObject;
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\FacebookResponse;
+use App\Application\Service\AuthTokenData;
 
 class AccessTokenVerificatorTest extends TestCase
 {
@@ -88,7 +89,8 @@ class AccessTokenVerificatorTest extends TestCase
     
     private function whenDoVerification($token, $email)
     {
-        $this->result = $this->testSubject->verify($token, $email);
+        $tokenData = new AuthTokenData($email, $token);
+        $this->result = $this->testSubject->verify($tokenData);
         
         return $this;
     }

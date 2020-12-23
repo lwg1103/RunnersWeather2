@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Tests\CurrentConditions;
+namespace App\Tests\Domain\CurrentConditions;
 
-use App\CurrentConditions\AirlyConditionsProvider;
-use App\Conditions\WeatherConditions;
+use App\Domain\CurrentConditions\AirlyConditionsProvider;
+use App\Domain\Conditions\WeatherConditions;
 use App\HttpClient\IHttpClient;
-use App\CurrentConditions\IConditionsProvider;
+use App\Domain\CurrentConditions\IConditionsProvider;
 
 class AirlyConditionsProviderTest extends ConditionsProviderBase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\CurrentConditions;
+namespace App\Tests\Domain\CurrentConditions;
 
 use PHPUnit\Framework\TestCase;
-use App\CurrentConditions\OpenWeatherTypeConverter;
-use App\Conditions\WeatherType;
+use App\Domain\CurrentConditions\OpenWeatherTypeConverter;
+use App\Domain\Conditions\WeatherType;
 
 class OpenWeatherTypeConverterTest extends TestCase
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Tests\Conditions;
+namespace App\Tests\Domain\Conditions;
 
 use PHPUnit\Framework\TestCase;
-use App\Conditions\WeatherConditions;
-use App\Conditions\AverageWeatherConditionsCalculator;
-use App\Conditions\WeatherType;
+use App\Domain\Conditions\WeatherConditions;
+use App\Domain\Conditions\AverageWeatherConditionsCalculator;
+use App\Domain\Conditions\WeatherType;
 
 class AverageWeatherConditionsCalculatorTest extends TestCase
 {
