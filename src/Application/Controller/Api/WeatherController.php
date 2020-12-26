@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Application\Entity\User;
 use App\Infrastructure\Repository\UserRepository;
 use App\Application\Controller\InvalidApiTokenException;
+use App\Application\Controller\ErrorCode;
 
 /**
  * @Route("/weather")
@@ -67,32 +68,48 @@ class WeatherController extends AbstractController
      */
     public function getWeather(Request $request)
     {
-        list($token, $lat, $long) = $this->validateParameters($request);
-        $User = $this->validateApiToken($token);
+        try
+        {
+            list($token, $lat, $long) = $this->validateParameters($request);
+            $User = $this->validateApiToken($token);
 
-        $ApiCallLog = $this->Logger->log($lat, $long, $User);
+            $ApiCallLog = $this->Logger->log($lat, $long, $User);
 
-        $this->ConditionsChecker->registerConditionsProvider(
-                new AirlyConditionsProvider($this->HttpClient, $this->getParameter('api.airly'))
-        );
+            $this->ConditionsChecker->registerConditionsProvider(
+                    new AirlyConditionsProvider($this->HttpClient, $this->getParameter('api.airly'))
+            );
 
-        $this->ConditionsChecker->registerConditionsProvider(
-                new OpenWeatherConditionsProvider($this->HttpClient, $this->getParameter('api.openweather'))
-        );
+            $this->ConditionsChecker->registerConditionsProvider(
+                    new OpenWeatherConditionsProvider($this->HttpClient, $this->getParameter('api.openweather'))
+            );
 
-        $conditions = $this->ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
+            $conditions = $this->ConditionsChecker->getCurrentConditionsForCoordinates($long, $lat);
 
-        $weather = $this->AverageWeatherConditionsCalculator->calculate($conditions);
-        $weather->decision = $this->DecisionMaker->checkWeatherForRunning($weather);
+            $weather           = $this->AverageWeatherConditionsCalculator->calculate($conditions);
+            $weather->decision = $this->DecisionMaker->checkWeatherForRunning($weather);
 
-        $this->Logger->logDecision($ApiCallLog, $weather->decision);
+            $this->Logger->logDecision($ApiCallLog, $weather->decision);
 
-        return $this->createJsonResponse($weather);
+            return $this->createJsonResponse($weather);
+        }
+        catch (InvalidParameterException $e)
+        {
+            return $this->createJsonResponse(null, ErrorCode::INVALID_PARAMETERS);
+        }
+        catch (InvalidApiTokenException $e)
+        {
+            return $this->createJsonResponse(null, ErrorCode::INVALID_API_TOKEN);
+        }
     }
 
-    private function createJsonResponse($content): JsonResponse
+    private function createJsonResponse($weather, int $error = ErrorCode::NO_ERROR): JsonResponse
     {
-        $response = new JsonResponse($content);
+        $responseArray = [
+            'error'   => $error,
+            'weather' => $weather,
+        ];
+
+        $response = new JsonResponse($responseArray);
 
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
