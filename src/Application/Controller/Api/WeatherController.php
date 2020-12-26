@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Application\Entity\User;
 use App\Infrastructure\Repository\UserRepository;
 use App\Application\Controller\InvalidApiTokenException;
+use App\Application\Controller\ErrorCode;
 
 /**
  * @Route("/weather")
@@ -93,15 +94,15 @@ class WeatherController extends AbstractController
         }
         catch (InvalidParameterException $e)
         {
-            return $this->createJsonResponse(null, 'invalid parameters');
+            return $this->createJsonResponse(null, ErrorCode::INVALID_PARAMETERS);
         }
         catch (InvalidApiTokenException $e)
         {
-            return $this->createJsonResponse(null, 'invalid api token');
+            return $this->createJsonResponse(null, ErrorCode::INVALID_API_TOKEN);
         }
     }
 
-    private function createJsonResponse($weather, string $error = ''): JsonResponse
+    private function createJsonResponse($weather, int $error = ErrorCode::NO_ERROR): JsonResponse
     {
         $responseArray = [
             'error'   => $error,
