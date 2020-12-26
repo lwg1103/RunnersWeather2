@@ -1,3 +1,6 @@
+## 0.12.3
+error code in api response
+
 ## 0.12.2
 saves user with api request log
 
